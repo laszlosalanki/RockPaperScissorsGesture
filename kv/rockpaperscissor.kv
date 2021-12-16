@@ -1,0 +1,82 @@
+WindowManager:
+    MainMenuWindow:
+    GameWindow:
+    SettingsWindow:
+    ScoreboardWindow:
+
+<MainMenuWindow>:
+    name: "main"
+
+    GridLayout:
+        rows: 5
+        row_default_height: 60
+
+        Label:
+            text: "Rock Paper Scissor Gesture"
+            font_size: 24
+
+        Button:
+            size_hint: None, None
+            size: 200, 50
+            text: "New Game"
+            on_release:
+                app.root.current = "game"
+
+        Button:
+            size_hint: None, None
+            size: 200, 50
+            text: "Settings"
+            on_release:
+                app.root.current = "settings"
+
+        Button:
+            size_hint: None, None
+            size: 200, 50
+            text: "Scoreboard"
+            on_release:
+                app.root.current = "scoreboard"
+
+        Label:
+            text: "Press ESC to exit"
+
+<GameWindow>:
+    name: "game"
+
+    GridLayout:
+        rows: 2
+
+        Label:
+            text: "Game view"
+
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "main"
+
+<SettingsWindow>:
+    name: "settings"
+
+    GridLayout:
+        rows: 2
+
+        Label:
+            text: "Settings view"
+
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "main"
+
+<ScoreboardWindow>:
+    name: "scoreboard"
+
+    GridLayout:
+        rows: 2
+
+        Label:
+            text: "Scoreboard view"
+
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "main"
