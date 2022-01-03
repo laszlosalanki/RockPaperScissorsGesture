@@ -29,6 +29,7 @@ def update_settings_file(file_with_path, key, value):
             settings_file.writelines(lines)
         #
     #
+    print(constants.LOG_TEMPLATE, constants.LOG_ACT_GAME_SETTINGS_FILE_UPDATED)
 
 
 def create_settings_file(file_with_path):
@@ -36,3 +37,4 @@ def create_settings_file(file_with_path):
         settings_file.write(constants.ACT_GAME_SETTINGS_HEADER)
         settings_file.write('\n')
     #
+    print(constants.LOG_TEMPLATE, constants.LOG_ACT_GAME_SETTINGS_FILE_CREATED)

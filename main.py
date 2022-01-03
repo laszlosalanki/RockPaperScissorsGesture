@@ -33,6 +33,7 @@ class RockPaperScissorMainApp(App):
 
     def on_stop(self):
         remove(constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME)
+        print(constants.LOG_TEMPLATE, constants.LOG_ACT_GAME_SETTINGS_FILE_DELETED)
 
 
 if __name__ == '__main__':

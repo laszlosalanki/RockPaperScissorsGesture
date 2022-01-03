@@ -115,18 +115,24 @@ WindowManager:
         Label:
             text: "Select difficulty"
 
-        Button:
+        EasyButton:
             text: "Easy"
+            on_press:
+                self.set_difficulty(1)
             on_release:
                 app.root.current = "game"
 
-        Button:
-            text: "Average"
+        NormalButton:
+            text: "Normal"
+            on_press:
+                self.set_difficulty(2)
             on_release:
                 app.root.current = "game"
 
-        Button:
+        HardButton:
             text: "Hard"
+            on_press:
+                self.set_difficulty(3)
             on_release:
                 app.root.current = "game"
 
@@ -139,7 +145,13 @@ WindowManager:
     name: "game"
 
     GridLayout:
-        rows: 1
+        rows: 3
+
+        Label:
+            text: "Live camera feed"
+
+        CameraFrame:
+            name: "camframe"
 
         Button:
             text: "Back to main menu"
@@ -151,10 +163,9 @@ WindowManager:
 
     GridLayout:
         rows: 2
-        row_default_height: 60
 
         Label:
-            text: "Settings view"
+            text: "Settings"
 
         Button:
             text: "Back"
@@ -168,7 +179,7 @@ WindowManager:
         rows: 2
 
         Label:
-            text: "Scoreboard view"
+            text: "Scoreboard"
 
         Button:
             text: "Back"
