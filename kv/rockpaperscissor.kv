@@ -1,5 +1,8 @@
 WindowManager:
     MainMenuWindow:
+    NewGameWindow:
+    OpponentSelectionViewWindow:
+    DifficultySelectionViewWindow:
     GameWindow:
     SettingsWindow:
     ScoreboardWindow:
@@ -20,7 +23,7 @@ WindowManager:
             size: 200, 50
             text: "New Game"
             on_release:
-                app.root.current = "game"
+                app.root.current = "newgame"
 
         Button:
             size_hint: None, None
@@ -37,19 +40,109 @@ WindowManager:
                 app.root.current = "scoreboard"
 
         Label:
-            text: "Press ESC to exit"
+            text: "Press ESC to exit anytime"
+
+<NewGameWindow>:
+    name: "newgame"
+
+    GridLayout:
+        rows: 5
+        row_default_height: 60
+
+        Label:
+            text: "Select game mode"
+
+        GameMode1:
+            text: "Rock Paper Scissor"
+            on_press:
+                self.set_game_mode(1)
+            on_release:
+                app.root.current = "opponentselectionview"
+
+        GameMode2:
+            text: "Rock Paper Scissor Lizard Spock"
+            on_press:
+                self.set_game_mode(2)
+            on_release:
+                app.root.current = "opponentselectionview"
+
+        GameMode3:
+            text: "Rock Paper Scissor Lizard Spock Mage Batman Spiderman Glock"
+            on_press:
+                self.set_game_mode(3)
+            on_release:
+                app.root.current = "opponentselectionview"
+
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "main"
+
+<OpponentSelectionViewWindow>:
+    name: "opponentselectionview"
+
+    GridLayout:
+        rows: 4
+
+        Label:
+            text: "Select your opponent"
+
+        Computer:
+            text: "Computer"
+            on_press:
+                self.set_opponent(1)
+            on_release:
+                app.root.current = "difficultyselectionview"
+
+        Other:
+            text: "Other player"
+            on_press:
+                self.set_opponent(2)
+            on_release:
+                app.root.current = "game"
+
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "newgame"
+
+<DifficultySelectionViewWindow>:
+    name: "difficultyselectionview"
+
+    GridLayout:
+        rows: 5
+
+        Label:
+            text: "Select difficulty"
+
+        Button:
+            text: "Easy"
+            on_release:
+                app.root.current = "game"
+
+        Button:
+            text: "Average"
+            on_release:
+                app.root.current = "game"
+
+        Button:
+            text: "Hard"
+            on_release:
+                app.root.current = "game"
+
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "opponentselectionview"
 
 <GameWindow>:
     name: "game"
 
     GridLayout:
-        rows: 2
-
-        Label:
-            text: "Game view"
+        rows: 1
 
         Button:
-            text: "Back"
+            text: "Back to main menu"
             on_release:
                 app.root.current = "main"
 
@@ -58,6 +151,7 @@ WindowManager:
 
     GridLayout:
         rows: 2
+        row_default_height: 60
 
         Label:
             text: "Settings view"
