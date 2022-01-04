@@ -162,13 +162,27 @@ WindowManager:
     name: "settings"
 
     GridLayout:
-        rows: 2
+        rows: 3
 
         Label:
             text: "Settings"
 
-        Button:
+        GridLayout:
+            rows: 1
+            cols: 2
+
+            Label:
+                text: "Logging"
+
+            LoggingSwitch:
+                text: "Off"
+                on_active:
+                    self.switch_callback(self.active)
+
+        BackAndSaveButton:
             text: "Back"
+            on_press:
+                self.save_settings()
             on_release:
                 app.root.current = "main"
 
