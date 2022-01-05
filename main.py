@@ -25,6 +25,20 @@ kv = Builder.load_file('kv/rockpaperscissor.kv')
 act_settings_file = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
 settings_file = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
 
+settings = dict()
+
+
+def read_settings_file():
+    with open(settings_file, 'r') as saved_settings_file:
+        settings_lines = saved_settings_file.readlines()[1:]
+
+        for line in settings_lines:
+            line_parts = line.split(' ')
+            settings[line_parts[0]] = line_parts[1].strip()
+        #
+        # TODO: apply settings
+    #
+
 
 def create_settings_file_with_default_values():
     create_settings_file(settings_file,
@@ -52,8 +66,7 @@ class RockPaperScissorMainApp(App):
         create_settings_file(act_settings_file)
 
         if exists(settings_file):
-            # TODO: read and apply settings
-            pass
+            read_settings_file()
         else:
             create_settings_file_with_default_values()
 
