@@ -1,41 +1,46 @@
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
-from kivy.uix.switch import Switch
-from os.path import exists
-from data import constants
-from settings_file_helper import create_settings_file, update_settings_file
+from kivy.uix.slider import Slider
 
-settings = dict()
+from settings_file_helper import update_settings_file
+from data import constants
+
 filename_with_path = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
 
-if exists(filename_with_path):
-    with open(filename_with_path, 'r') as settings_file:
-        settings_lines = settings_file.readlines()[1:]
 
-        for line in settings_lines:
-            settings[line.split(' ')[0]] = line.split(' ')[1]
+# TODO: replace the log buttons with a switch, then update the states
+# TODO: set the slider values to the ones from the settings file
 
-        # TODO: set the switches
-    #
-else:
-    create_settings_file(filename_with_path, constants.SETTINGS_HEADER)
-
-
-class LoggingSwitch(Switch):
-    def switch_callback(self, active):
-        if active:
-            update_settings_file(filename_with_path, constants.SETTINGS_IS_LOGGING_ENABLED_KEY,
-                                 'True', constants.SETTINGS_HEADER)
-            settings[constants.SETTINGS_IS_LOGGING_ENABLED_KEY] = 'True'
-        else:
-            update_settings_file(filename_with_path, constants.SETTINGS_IS_LOGGING_ENABLED_KEY,
-                                 'False', constants.SETTINGS_HEADER)
-            settings[constants.SETTINGS_IS_LOGGING_ENABLED_KEY] = 'False'
+class LoggingOffButton(Button):
+    def log_off_click(self):
+        update_settings_file(filename_with_path,
+                             constants.SETTINGS_IS_LOGGING_ENABLED_KEY,
+                             False,
+                             constants.SETTINGS_HEADER)
 
 
-class BackAndSaveButton(Button):
-    def save_settings(self):
-        pass
+class LoggingOnButton(Button):
+    def log_on_click(self):
+        update_settings_file(filename_with_path,
+                             constants.SETTINGS_IS_LOGGING_ENABLED_KEY,
+                             True,
+                             constants.SETTINGS_HEADER)
+
+
+class MinDetectionConfidenceSwitch(Slider):
+    def save_value_on_touch_up(self):
+        update_settings_file(filename_with_path,
+                             constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY,
+                             self.value,
+                             constants.SETTINGS_HEADER)
+
+
+class MinTrackingConfidenceSwitch(Slider):
+    def save_value_on_touch_up(self):
+        update_settings_file(filename_with_path,
+                             constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY,
+                             self.value,
+                             constants.SETTINGS_HEADER)
 
 
 class SettingsWindow(Screen):

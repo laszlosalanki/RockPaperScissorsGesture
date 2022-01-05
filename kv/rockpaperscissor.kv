@@ -162,27 +162,75 @@ WindowManager:
     name: "settings"
 
     GridLayout:
-        rows: 3
+        rows: 4
 
         Label:
             text: "Settings"
 
         GridLayout:
-            rows: 1
+            rows: 3
             cols: 2
 
             Label:
-                text: "Logging"
+                text: "Logging:"
 
-            LoggingSwitch:
-                text: "Off"
-                on_active:
-                    self.switch_callback(self.active)
+            GridLayout:
+                rows: 1
+                cols: 2
 
-        BackAndSaveButton:
+                LoggingOffButton:
+                    text: "Logging off"
+                    on_press:
+                        self.log_off_click()
+
+                LoggingOnButton:
+                    text: "Logging on"
+                    on_press:
+                        self.log_on_click()
+
+            Label:
+                text: "Minimum detection confidence:"
+
+            GridLayout:
+                rows: 1
+                cols: 2
+
+                MinDetectionConfidenceSwitch:
+                    id: min_det_conf
+                    min: 0.3
+                    max: 0.9
+                    step: 0.1
+                    orientation: "horizontal"
+                    on_touch_up:
+                        self.save_value_on_touch_up()
+
+                Label:
+                    text: str(min_det_conf.value)
+
+            Label:
+                text: "Minimum tracking confidence:"
+
+            GridLayout:
+                rows: 1
+                cols: 2
+
+                MinTrackingConfidenceSwitch:
+                    id: min_tra_conf
+                    min: 0.3
+                    max: 0.9
+                    step: 0.1
+                    orientation: "horizontal"
+                    on_touch_up:
+                        self.save_value_on_touch_up()
+
+                Label:
+                    text: str(min_tra_conf.value)
+
+        Label:
+            text: "Changes will take effect after restart."
+
+        Button:
             text: "Back"
-            on_press:
-                self.save_settings()
             on_release:
                 app.root.current = "main"
 
