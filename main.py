@@ -18,6 +18,7 @@ from os import remove
 from os.path import exists
 from settings_file_helper import create_settings_file, update_settings_file
 
+# TODO: remove after resolution fixed
 Config.set('graphics', 'width', '1280')
 Config.set('graphics', 'height', '768')
 kv = Builder.load_file('kv/rockpaperscissor.kv')
