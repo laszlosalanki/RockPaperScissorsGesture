@@ -8,248 +8,445 @@ WindowManager:
     ScoreboardWindow:
 
 <MainMenuWindow>:
-    name: "main"
+    name: 'main'
 
-    GridLayout:
-        rows: 5
-        row_default_height: 60
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
 
-        Label:
-            text: "Rock Paper Scissor Gesture"
-            font_size: 24
-
-        Button:
-            size_hint: None, None
-            size: 200, 50
-            text: "New Game"
-            on_release:
-                app.root.current = "newgame"
-
-        Button:
-            size_hint: None, None
-            size: 200, 50
-            text: "Settings"
-            on_release:
-                app.root.current = "settings"
-
-        Button:
-            size_hint: None, None
-            size: 200, 50
-            text: "Scoreboard"
-            on_release:
-                app.root.current = "scoreboard"
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
 
         Label:
-            text: "Press ESC to exit anytime"
 
-<NewGameWindow>:
-    name: "newgame"
-
-    GridLayout:
-        rows: 5
-        row_default_height: 60
-
-        Label:
-            text: "Select game mode"
-
-        GameMode1:
-            text: "Rock Paper Scissor"
-            on_press:
-                self.set_game_mode(1)
-            on_release:
-                app.root.current = "opponentselectionview"
-
-        GameMode2:
-            text: "Rock Paper Scissor Lizard Spock"
-            on_press:
-                self.set_game_mode(2)
-            on_release:
-                app.root.current = "opponentselectionview"
-
-        GameMode3:
-            text: "Rock Paper Scissor Lizard Spock Mage Batman Spiderman Glock"
-            on_press:
-                self.set_game_mode(3)
-            on_release:
-                app.root.current = "opponentselectionview"
-
-        Button:
-            text: "Back"
-            on_release:
-                app.root.current = "main"
-
-<OpponentSelectionViewWindow>:
-    name: "opponentselectionview"
-
-    GridLayout:
-        rows: 4
-
-        Label:
-            text: "Select your opponent"
-
-        Computer:
-            text: "Computer"
-            on_press:
-                self.set_opponent(1)
-            on_release:
-                app.root.current = "difficultyselectionview"
-
-        Other:
-            text: "Other player"
-            on_press:
-                self.set_opponent(2)
-            on_release:
-                app.root.current = "game"
-
-        Button:
-            text: "Back"
-            on_release:
-                app.root.current = "newgame"
-
-<DifficultySelectionViewWindow>:
-    name: "difficultyselectionview"
-
-    GridLayout:
-        rows: 5
-
-        Label:
-            text: "Select difficulty"
-
-        EasyButton:
-            text: "Easy"
-            on_press:
-                self.set_difficulty(1)
-            on_release:
-                app.root.current = "game"
-
-        NormalButton:
-            text: "Normal"
-            on_press:
-                self.set_difficulty(2)
-            on_release:
-                app.root.current = "game"
-
-        HardButton:
-            text: "Hard"
-            on_press:
-                self.set_difficulty(3)
-            on_release:
-                app.root.current = "game"
-
-        Button:
-            text: "Back"
-            on_release:
-                app.root.current = "opponentselectionview"
-
-<GameWindow>:
-    name: "game"
-
-    GridLayout:
-        rows: 3
-
-        Label:
-            text: "Live camera feed"
-
-        CameraFrame:
-            name: "camframe"
-
-        Button:
-            text: "Back to main menu"
-            on_release:
-                app.root.current = "main"
-
-<SettingsWindow>:
-    name: "settings"
-
-    GridLayout:
-        rows: 4
-
-        Label:
-            text: "Settings"
-
-        GridLayout:
-            rows: 4
-            cols: 2
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
 
             Label:
-                text: "Logging:"
-
-            GridLayout:
-                rows: 1
-                cols: 2
-
-                LoggingOffButton:
-                    text: "Logging off"
-                    on_press:
-                        self.log_off_click()
-
-                LoggingOnButton:
-                    text: "Logging on"
-                    on_press:
-                        self.log_on_click()
+                text: 'Rock Paper Scissor Gesture'
+                font_size: 60
 
             Label:
-                text: "Minimum detection confidence:"
-
-            GridLayout:
-                rows: 1
-                cols: 2
-
-                MinDetectionConfidenceSwitch:
-                    id: min_det_conf
-                    min: 0.3
-                    max: 0.9
-                    step: 0.1
-                    orientation: "horizontal"
-                    on_touch_up:
-                        self.save_value_on_touch_up()
-
-                Label:
-                    text: str(min_det_conf.value)
-
-            Label:
-                text: "Minimum tracking confidence:"
-
-            GridLayout:
-                rows: 1
-                cols: 2
-
-                MinTrackingConfidenceSwitch:
-                    id: min_tra_conf
-                    min: 0.3
-                    max: 0.9
-                    step: 0.1
-                    orientation: "horizontal"
-                    on_touch_up:
-                        self.save_value_on_touch_up()
-
-                Label:
-                    text: str(min_tra_conf.value)
-
-            Label:
-                text: "Resolution:"
 
             Button:
-                text: "TODO: popup window or custom dropdown list"
+                text: 'New Game'
+                on_release:
+                    app.root.current = 'newgame'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            Button:
+                text: 'Settings'
+                on_release:
+                    app.root.current = 'settings'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            Button:
+                text: 'Scoreboard'
+                on_release:
+                    app.root.current = 'scoreboard'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            Label:
+
+            Label:
+                text: 'Press ESC to exit anytime'
 
         Label:
-            text: "Changes will take effect after restart."
 
-        Button:
-            text: "Back"
-            on_release:
-                app.root.current = "main"
+<NewGameWindow>:
+    name: 'newgame'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        Label:
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+
+            Label:
+                text: 'Select game mode'
+                font_size: 60
+
+            Label:
+
+            GameMode1:
+                text: 'Rock Paper Scissor'
+                on_press:
+                    self.set_game_mode(1)
+                on_release:
+                    app.root.current = 'opponentselectionview'
+                size_hint: None, None
+                size: 200, 50
+                pos_hint: {'center_x': 0.5}
+
+            GameMode2:
+                text: 'Rock Paper Scissor Lizard Spock'
+                on_press:
+                    self.set_game_mode(2)
+                on_release:
+                    app.root.current = 'opponentselectionview'
+                size_hint: None, None
+                size: 300, 50
+                pos_hint: {'center_x': 0.5}
+
+            GameMode3:
+                text: 'Rock Paper Scissor Lizard Spock Mage Batman Spiderman Glock'
+                on_press:
+                    self.set_game_mode(3)
+                on_release:
+                    app.root.current = 'opponentselectionview'
+                size_hint: None, None
+                size: 500, 50
+                pos_hint: {'center_x': 0.5}
+
+
+            Label:
+
+            Button:
+                text: 'Back'
+                on_release:
+                    app.root.current = 'main'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+        Label:
+
+<OpponentSelectionViewWindow>:
+    name: 'opponentselectionview'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        Label:
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+
+            Label:
+                text: 'Select your opponent'
+                font_size: 60
+
+            Label:
+
+            Computer:
+                text: 'Computer'
+                on_press:
+                    self.set_opponent(1)
+                on_release:
+                    app.root.current = 'difficultyselectionview'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            Other:
+                text: 'Other player'
+                on_press:
+                    self.set_opponent(2)
+                on_release:
+                    app.root.current = 'game'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            Label:
+
+            Button:
+                text: 'Back'
+                on_release:
+                    app.root.current = 'newgame'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+        Label:
+
+<DifficultySelectionViewWindow>:
+    name: 'difficultyselectionview'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        Label:
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+
+            Label:
+                text: 'Select difficulty'
+                font_size: 60
+
+            Label:
+
+            EasyButton:
+                text: 'Easy'
+                on_press:
+                    self.set_difficulty(1)
+                on_release:
+                    app.root.current = 'game'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            NormalButton:
+                text: 'Normal'
+                on_press:
+                    self.set_difficulty(2)
+                on_release:
+                    app.root.current = 'game'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            HardButton:
+                text: 'Hard'
+                on_press:
+                    self.set_difficulty(3)
+                on_release:
+                    app.root.current = 'game'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            Label:
+
+            Button:
+                text: 'Back'
+                on_release:
+                    app.root.current = 'opponentselectionview'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+        Label:
+
+<GameWindow>:
+    name: 'game'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 20
+
+            CameraFrame:
+                allow_stretch: True
+
+            Image:
+                source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/wizard.png'
+                size_hint_y: 0.3
+                allow_stretch: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: 0.2
+
+                Label:
+                    text: 'Predicted gesture: rock'
+
+                Button:
+                    text: 'Back to Main'
+                    on_release:
+                        app.root.current = 'main'
+                    size_hint: None, None
+                    size: 160, 50
+                    pos_hint: {'center_x': 0.5}
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+
+
+<SettingsWindow>:
+    name: 'settings'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        Label:
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Settings'
+                font_size: 60
+
+            Label:
+
+            BoxLayout:
+                orientation: 'horizontal'
+
+                BoxLayout:
+                    orientation: 'vertical'
+
+                    Label:
+                        text: 'Logging:'
+
+                    Label:
+                        text: 'Minimum detection confidence:'
+
+                    Label:
+                        text: 'Minimum tracking confidence:'
+
+                BoxLayout:
+                    orientation: 'vertical'
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+
+                        LoggingOffButton:
+                            text: 'Logging off'
+                            on_press:
+                                self.log_off_click()
+
+                        LoggingOnButton:
+                            text: 'Logging on'
+                            on_press:
+                                self.log_on_click()
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+
+                        MinDetectionConfidenceSwitch:
+                            id: min_det_conf
+                            min: 0.3
+                            max: 0.9
+                            step: 0.1
+                            orientation: 'horizontal'
+                            on_touch_up:
+                                self.save_value_on_touch_up()
+
+                        Label:
+                            text: str(min_det_conf.value)
+                            size_hint_x: 0.3
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+
+                        MinTrackingConfidenceSwitch:
+                            id: min_tra_conf
+                            min: 0.3
+                            max: 0.9
+                            step: 0.1
+                            orientation: 'horizontal'
+                            on_touch_up:
+                                self.save_value_on_touch_up()
+
+                        Label:
+                            text: str(min_tra_conf.value)
+                            size_hint_x: 0.3
+
+            Label:
+
+            Label:
+                text: 'Changes will take effect after restart.'
+
+            Button:
+                text: 'Back'
+                on_release:
+                    app.root.current = 'main'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+        Label:
 
 <ScoreboardWindow>:
-    name: "scoreboard"
+    name: 'scoreboard'
 
-    GridLayout:
-        rows: 2
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
 
         Label:
-            text: "Scoreboard"
 
-        Button:
-            text: "Back"
-            on_release:
-                app.root.current = "main"
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Scoreboard'
+                font_size: 60
+
+            Label:
+
+            Label:
+
+            Label:
+
+            Button:
+                text: 'Back'
+                on_release:
+                    app.root.current = 'main'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+        Label:

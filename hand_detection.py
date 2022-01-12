@@ -9,7 +9,7 @@ mp_hands = mp.solutions.hands
 
 
 class HandDetection:
-    def __init__(self, static_image_mode=False, max_num_hands=2,
+    def __init__(self, static_image_mode=False, max_num_hands=1,
                  min_detection_confidence=0.5, min_tracking_confidence=0.5):
         self.hands = mp_hands.Hands(
             static_image_mode=static_image_mode,
@@ -52,6 +52,26 @@ def is_paper(positions):
            (positions[20][2] < positions[18][2])
 
 
+def is_lizard(positions):
+    thumb_tip_index_tip_distance = abs(positions[8][1] - positions[4][1])
+    return is_paper(positions) and \
+        (positions[4][2] < positions[3][2]) and \
+        (thumb_tip_index_tip_distance < 47)
+
+
+def is_wizard(positions):
+    idx_tip_range = abs(positions[8][2] - positions[6][2])
+    mid_tip_range = abs(positions[12][2] - positions[10][2])
+    rin_tip_range = abs(positions[16][2] - positions[14][2])
+    pin_tip_range = abs(positions[20][2] - positions[18][2])
+    thu_tip_range = abs(positions[5][1] - positions[4][1])
+    return (15 <= idx_tip_range <= 35) and \
+           (15 <= mid_tip_range <= 35) and \
+           (15 <= rin_tip_range <= 35) and \
+           (15 <= pin_tip_range <= 35) and \
+           (25 <= thu_tip_range <= 45)
+
+
 def is_scissor(positions):
     return (positions[8][2] < positions[6][2]) and \
            (positions[8][2] < positions[6][2]) and \
@@ -68,14 +88,19 @@ def is_spiderman(positions):
 def is_batman(positions):
     return (positions[4][2] < positions[3][2]) and \
            (positions[20][2] < positions[18][2]) and \
-           (positions[8][2] > positions[6][2]) and \
-           (positions[12][2] > positions[10][2]) and \
-           (positions[16][2] > positions[14][2])
+           (positions[8][2] > positions[5][2]) and \
+           (positions[12][2] > positions[9][2]) and \
+           (positions[16][2] > positions[13][2])
 
 
 def is_spock(positions):
-    tip_distance = positions[16][1] - positions[12][1]
-    return is_paper(positions) and tip_distance > 50.0
+    idx_mid_tip_distance = abs(positions[12][1] - positions[8][1])
+    mid_ring_tip_distance = abs(positions[16][1] - positions[12][1])
+    ring_pinky_tip_distance = abs(positions[20][1] - positions[16][1])
+    return is_paper(positions) and \
+           (mid_ring_tip_distance > 47.0) and \
+           (20 > idx_mid_tip_distance > 5) and \
+           (20 > ring_pinky_tip_distance > 5)
 
 
 def is_glock(positions):
@@ -95,7 +120,9 @@ def get_coordinates_by_hand(data, hand_no, img_w, img_h):
 
 
 def recognise_hand_gesture(positions):
-    if is_spiderman(positions):
+    if is_wizard(positions):
+        return constants.WIZARD
+    elif is_spiderman(positions):
         return constants.SPIDERMAN
     elif is_batman(positions):
         return constants.BATMAN
@@ -103,20 +130,22 @@ def recognise_hand_gesture(positions):
         return constants.GLOCK
     elif is_scissor(positions):
         return constants.SCISSOR
-    elif is_rock(positions):
-        return constants.ROCK
     elif is_spock(positions):
         return constants.SPOCK
     elif is_paper(positions):
         return constants.PAPER
+    elif is_rock(positions):
+        return constants.ROCK
     else:
         return constants.LOG_CANNOT_RECOGNISE_GESTURE
+
+
 #############################################################
 
 
 if __name__ == '__main__':
     hd = HandDetection()
-    capture = cv2.VideoCapture(0)
+    capture = cv2.VideoCapture(1)
     while capture.isOpened():
         success, image = capture.read()
         if not success:
