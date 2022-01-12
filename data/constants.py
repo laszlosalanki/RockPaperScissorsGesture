@@ -13,20 +13,21 @@ LOG_ACT_GAME_SETTINGS_FILE_CREATED = 'Actual game settings file created.'
 LOG_ACT_GAME_SETTINGS_FILE_DELETED = 'Actual game settings file deleted.'
 LOG_PREDICTED_GESTURE = 'Predicted gesture:'
 LOG_CANNOT_RECOGNISE_GESTURE = 'Gesture cannot be recognised.'
+LOG_NO_HAND = 'No hand detected.'
 
 # Supported gestures
 # Game mode 1
-ROCK = 'Rock'
-PAPER = 'Paper'
-SCISSOR = 'Scissor'
+ROCK = 'rock'
+PAPER = 'paper'
+SCISSOR = 'scissor'
 # Game mode 2
-LIZARD = 'Lizard'
-SPOCK = 'Spock'
+LIZARD = 'lizard'
+SPOCK = 'spock'
 # Game mode 3
-WIZARD = 'Wizard'
-BATMAN = 'Batman'
-SPIDERMAN = 'Spiderman'
-GLOCK = 'Glock'
+WIZARD = 'wizard'
+BATMAN = 'batman'
+SPIDERMAN = 'spiderman'
+GLOCK = 'glock'
 
 # File
 ACT_GAME_SETTINGS_FILE_NAME = 'ACT_TMP_SETTINGS'
@@ -52,8 +53,18 @@ SETTINGS_MIN_DETECTION_CONFIDENCE_DEFAULT_VALUE = 0.5
 SETTINGS_MIN_TRACKING_CONFIDENCE_KEY = 'MIN_TRACKING_CONFIDENCE: '
 SETTINGS_MIN_TRACKING_CONFIDENCE_DEFAULT_VALUE = 0.5
 
-SETTINGS_RESOLUTION_WIDTH_KEY = 'RESOLUTION_WIDTH: '
-SETTINGS_RESOLUTION_WIDTH_DEFAULT_VALUE = 1280
-
-SETTINGS_RESOLUTION_HEIGHT_KEY = 'RESOLUTION_HEIGHT: '
-SETTINGS_RESOLUTION_HEIGHT_DEFAULT_VALUE = 768
+# Gesture images
+GESTURE_IMAGES_PATH = 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/'
+GESTURE_IMAGES = {
+    'rock': GESTURE_IMAGES_PATH + 'rock.png',
+    'paper': GESTURE_IMAGES_PATH + 'paper.png',
+    'scissor': GESTURE_IMAGES_PATH + 'scissor.png',
+    'glock': GESTURE_IMAGES_PATH + 'glock.png',
+    'spock': GESTURE_IMAGES_PATH + 'spock.png',
+    'wizard': GESTURE_IMAGES_PATH + 'wizard.png',
+    'lizard': GESTURE_IMAGES_PATH + 'lizard.png',
+    'spiderman': GESTURE_IMAGES_PATH + 'spiderman.png',
+    'batman': GESTURE_IMAGES_PATH + 'batman.png',
+    LOG_CANNOT_RECOGNISE_GESTURE: GESTURE_IMAGES_PATH + 'image-not-found.png',
+    LOG_NO_HAND: GESTURE_IMAGES_PATH + 'image-not-found.png'
+}

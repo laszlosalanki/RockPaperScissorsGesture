@@ -5,7 +5,9 @@ from kivy.graphics.texture import Texture
 
 from data import constants
 from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture
-import cv2
+from cv2 import cv2
+
+detected_gesture = None
 
 
 class CameraFrame(Image):
@@ -21,9 +23,14 @@ class CameraFrame(Image):
             success, image = self.cap.read()
             (processed_image, landmarks) = self.hd.find_hand_positions(image)
 
+            global detected_gesture
+
             if landmarks:
                 data = get_coordinates_by_hand(landmarks, 0, processed_image.shape[1], processed_image.shape[0])
-                print(constants.LOG_TEMPLATE, constants.LOG_PREDICTED_GESTURE, recognise_hand_gesture(data))
+                detected_gesture = recognise_hand_gesture(data)
+                print(constants.LOG_TEMPLATE, constants.LOG_PREDICTED_GESTURE, detected_gesture)
+            else:
+                detected_gesture = constants.LOG_NO_HAND
 
             buf1 = cv2.flip(processed_image, 0)
             buf = buf1.tostring()
@@ -33,4 +40,19 @@ class CameraFrame(Image):
 
 
 class GameWindow(Screen):
-    pass
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        Clock.schedule_interval(self.predicted_photo, 0.03)
+        Clock.schedule_interval(self.predicted_text, 0.03)
+
+    def predicted_photo(self, dt):
+        global detected_gesture
+        if detected_gesture:
+            if detected_gesture in constants.GESTURE_IMAGES.keys():
+                self.ids.gesture_image.source = constants.GESTURE_IMAGES[detected_gesture]
+
+    def predicted_text(self, dt):
+        global detected_gesture
+        if detected_gesture:
+            self.ids.gesture_text.text = detected_gesture
