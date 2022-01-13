@@ -3,6 +3,7 @@ WindowManager:
     NewGameWindow:
     OpponentSelectionViewWindow:
     DifficultySelectionViewWindow:
+    RoundSelectionViewWindow:
     GameWindow:
     SettingsWindow:
     ScoreboardWindow:
@@ -174,7 +175,7 @@ WindowManager:
                 on_press:
                     self.set_opponent(2)
                 on_release:
-                    app.root.current = 'game'
+                    app.root.current = 'round'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
@@ -222,7 +223,7 @@ WindowManager:
                 on_press:
                     self.set_difficulty(1)
                 on_release:
-                    app.root.current = 'game'
+                    app.root.current = 'round'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
@@ -232,7 +233,7 @@ WindowManager:
                 on_press:
                     self.set_difficulty(2)
                 on_release:
-                    app.root.current = 'game'
+                    app.root.current = 'round'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
@@ -242,10 +243,82 @@ WindowManager:
                 on_press:
                     self.set_difficulty(3)
                 on_release:
-                    app.root.current = 'game'
+                    app.root.current = 'round'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
+
+            Label:
+
+            Button:
+                text: 'Back'
+                on_release:
+                    app.root.current = 'opponentselectionview'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+        Label:
+
+<RoundSelectionViewWindow>:
+    name: 'round'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        Label:
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Select the number of rounds'
+                font_size: 60
+
+            Label:
+
+            BoxLayout:
+                orientation: 'horizontal'
+
+                Round3Button:
+                    text: '3'
+                    font_size: 40
+                    on_release:
+                        app.root.current = 'game'
+                    on_press:
+                        self.set_rounds(3)
+
+                Round3Button:
+                    text: '5'
+                    font_size: 40
+                    on_release:
+                        app.root.current = 'game'
+                    on_press:
+                        self.set_rounds(5)
+
+                Round3Button:
+                    text: '7'
+                    font_size: 40
+                    on_release:
+                        app.root.current = 'game'
+                    on_press:
+                        self.set_rounds(7)
+
+                Round3Button:
+                    text: '9'
+                    font_size: 40
+                    on_release:
+                        app.root.current = 'game'
+                    on_press:
+                        self.set_rounds(9)
 
             Label:
 
@@ -282,26 +355,42 @@ WindowManager:
                 font_size: 40
 
             BoxLayout:
-                orientation: 'horizontal'
+                orientation: 'vertical'
+                spacing: 10
+                padding: 20
 
-                Label:
-                    text: 'Score:'
-                    font_size: 20
+                BoxLayout:
+                    orientation: 'horizontal'
 
-                Label:
-                    text: '0'
-                    font_size: 40
+                    Label:
+                        text: 'Score:'
+                        font_size: 20
 
-            BoxLayout:
-                orientation: 'horizontal'
+                    Label:
+                        text: '0'
+                        font_size: 40
 
-                Label:
-                    text: 'Hold on:'
-                    font_size: 20
+                BoxLayout:
+                    orientation: 'horizontal'
 
-                Label:
-                    text: '3'
-                    font_size: 40
+                    Label:
+                        text: 'Round:'
+                        font_size: 20
+
+                    Label:
+                        text: '1'
+                        font_size: 40
+
+                BoxLayout:
+                    orientation: 'horizontal'
+
+                    Label:
+                        text: 'Hold on:'
+                        font_size: 20
+
+                    Label:
+                        text: '3'
+                        font_size: 40
 
             Label:
                 text: 'Your turn'
@@ -313,18 +402,35 @@ WindowManager:
 
             CameraFrame:
                 allow_stretch: True
-
-            Image:
-                id: gesture_image
-                size_hint_y: 0.3
-                allow_stretch: True
+                size_hint_y: 0.6
 
             BoxLayout:
-                orientation: 'vertical'
-                size_hint_y: 0.2
+                orientation: 'horizontal'
+                padding: 20
+                size_hint_y: 0.3
+
+                Image:
+                    id: gesture_image_p1
+                    allow_stretch: True
 
                 Label:
-                    id: gesture_text
+                    text: '>'
+                    width: 160
+                    font_size: 60
+                    size_hint: None, None
+
+                Image:
+                    id: gesture_image_p2
+                    allow_stretch: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 10
+                padding: 20
+                size_hint_y: 0.1
+
+                Label:
+                    id: gesture_text_p1
 
                 Button:
                     text: 'Back to Main'
@@ -333,6 +439,9 @@ WindowManager:
                     size_hint: None, None
                     size: 160, 50
                     pos_hint: {'center_x': 0.5}
+
+                Label:
+                    id: gesture_text_p2
 
         BoxLayout:
             orientation: 'vertical'
@@ -343,26 +452,42 @@ WindowManager:
                 font_size: 40
 
             BoxLayout:
-                orientation: 'horizontal'
+                orientation: 'vertical'
+                spacing: 10
+                padding: 20
 
-                Label:
-                    text: 'Score:'
-                    font_size: 20
+                BoxLayout:
+                    orientation: 'horizontal'
 
-                Label:
-                    text: '0'
-                    font_size: 40
+                    Label:
+                        text: 'Score:'
+                        font_size: 20
 
-            BoxLayout:
-                orientation: 'horizontal'
+                    Label:
+                        text: '0'
+                        font_size: 40
 
-                Label:
-                    text: 'Hold on:'
-                    font_size: 20
+                BoxLayout:
+                    orientation: 'horizontal'
 
-                Label:
-                    text: '3'
-                    font_size: 40
+                    Label:
+                        text: 'Round:'
+                        font_size: 20
+
+                    Label:
+                        text: '0'
+                        font_size: 40
+
+                BoxLayout:
+                    orientation: 'horizontal'
+
+                    Label:
+                        text: 'Hold on:'
+                        font_size: 20
+
+                    Label:
+                        text: '3'
+                        font_size: 40
 
             Label:
                 text: 'Opponent\'s turn'

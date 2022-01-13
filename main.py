@@ -10,6 +10,7 @@ from screens.MainMenuWindow import MainMenuWindow
 from screens.NewGameWindow import NewGameWindow
 from screens.DifficultySelectionViewWindow import DifficultySelectionViewWindow
 from screens.OpponentSelectionViewWindow import OpponentSelectionViewWindow
+from screens.RoundSelectionViewWindow import RoundSelectionViewWindow
 from screens.GameWindow import GameWindow
 from screens.ScoreboardWindow import ScoreboardWindow
 from screens.SettingsWindow import SettingsWindow

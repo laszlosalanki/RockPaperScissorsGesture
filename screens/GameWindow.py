@@ -43,16 +43,26 @@ class GameWindow(Screen):
 
     def __init__(self, **kw):
         super().__init__(**kw)
-        Clock.schedule_interval(self.predicted_photo, 0.03)
-        Clock.schedule_interval(self.predicted_text, 0.03)
+        Clock.schedule_interval(self.predicted_photo_p1, 0.03)
+        Clock.schedule_interval(self.predicted_text_p1, 0.03)
 
-    def predicted_photo(self, dt):
+        # TODO: game
+        Clock.schedule_once(self.predicted_photo_p2)
+        Clock.schedule_once(self.predicted_text_p2)
+
+    def predicted_photo_p1(self, dt):
         global detected_gesture
         if detected_gesture:
             if detected_gesture in constants.GESTURE_IMAGES.keys():
-                self.ids.gesture_image.source = constants.GESTURE_IMAGES[detected_gesture]
+                self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture]
 
-    def predicted_text(self, dt):
+    def predicted_text_p1(self, dt):
         global detected_gesture
         if detected_gesture:
-            self.ids.gesture_text.text = detected_gesture
+            self.ids.gesture_text_p1.text = detected_gesture
+
+    def predicted_photo_p2(self, dt):
+        self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[constants.LOG_NO_HAND]
+
+    def predicted_text_p2(self, dt):
+        self.ids.gesture_text_p2.text = 'No hand detected.'
