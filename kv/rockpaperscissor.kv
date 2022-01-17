@@ -2,7 +2,6 @@ WindowManager:
     MainMenuWindow:
     NewGameWindow:
     OpponentSelectionViewWindow:
-    DifficultySelectionViewWindow:
     RoundSelectionViewWindow:
     GameWindow:
     SettingsWindow:
@@ -165,7 +164,7 @@ WindowManager:
                 on_press:
                     self.set_opponent(1)
                 on_release:
-                    app.root.current = 'difficultyselectionview'
+                    app.root.current = 'round'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
@@ -186,74 +185,6 @@ WindowManager:
                 text: 'Back'
                 on_release:
                     app.root.current = 'newgame'
-                size_hint: None, None
-                size: 160, 50
-                pos_hint: {'center_x': 0.5}
-
-        Label:
-
-<DifficultySelectionViewWindow>:
-    name: 'difficultyselectionview'
-
-    canvas.before:
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: 'images/background_main.jpg'
-
-    BoxLayout:
-        orientation: 'horizontal'
-        spacing: 10
-        padding: 20
-
-        Label:
-
-        BoxLayout:
-            orientation: 'vertical'
-            spacing: 10
-
-            Label:
-                text: 'Select difficulty'
-                font_size: 60
-
-            Label:
-
-            EasyButton:
-                text: 'Easy'
-                on_press:
-                    self.set_difficulty(1)
-                on_release:
-                    app.root.current = 'round'
-                size_hint: None, None
-                size: 160, 50
-                pos_hint: {'center_x': 0.5}
-
-            NormalButton:
-                text: 'Normal'
-                on_press:
-                    self.set_difficulty(2)
-                on_release:
-                    app.root.current = 'round'
-                size_hint: None, None
-                size: 160, 50
-                pos_hint: {'center_x': 0.5}
-
-            HardButton:
-                text: 'Hard'
-                on_press:
-                    self.set_difficulty(3)
-                on_release:
-                    app.root.current = 'round'
-                size_hint: None, None
-                size: 160, 50
-                pos_hint: {'center_x': 0.5}
-
-            Label:
-
-            Button:
-                text: 'Back'
-                on_release:
-                    app.root.current = 'opponentselectionview'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
