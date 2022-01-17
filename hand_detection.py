@@ -56,7 +56,7 @@ def is_lizard(positions):
     thumb_tip_index_tip_distance = abs(positions[8][1] - positions[4][1])
     return is_paper(positions) and \
         (positions[4][2] < positions[3][2]) and \
-        (thumb_tip_index_tip_distance < 47)
+        (thumb_tip_index_tip_distance < 10)
 
 
 def is_wizard(positions):
@@ -64,17 +64,15 @@ def is_wizard(positions):
     mid_tip_range = abs(positions[12][2] - positions[10][2])
     rin_tip_range = abs(positions[16][2] - positions[14][2])
     pin_tip_range = abs(positions[20][2] - positions[18][2])
-    thu_tip_range = abs(positions[5][1] - positions[4][1])
     return (15 <= idx_tip_range <= 35) and \
            (15 <= mid_tip_range <= 35) and \
            (15 <= rin_tip_range <= 35) and \
-           (15 <= pin_tip_range <= 35) and \
-           (25 <= thu_tip_range <= 45)
+           (15 <= pin_tip_range <= 35)
 
 
 def is_scissor(positions):
     return (positions[8][2] < positions[6][2]) and \
-           (positions[8][2] < positions[6][2]) and \
+           (positions[12][2] < positions[10][2]) and \
            not is_paper(positions)
 
 
@@ -120,7 +118,9 @@ def get_coordinates_by_hand(data, hand_no, img_w, img_h):
 
 
 def recognise_hand_gesture(positions):
-    if is_wizard(positions):
+    if is_lizard(positions):
+        return constants.LIZARD
+    elif is_wizard(positions):
         return constants.WIZARD
     elif is_spiderman(positions):
         return constants.SPIDERMAN

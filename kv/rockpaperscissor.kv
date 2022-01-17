@@ -116,7 +116,7 @@ WindowManager:
                 pos_hint: {'center_x': 0.5}
 
             GameMode3:
-                text: 'Rock Paper Scissor Lizard Spock Mage Batman Spiderman Glock'
+                text: 'Rock Paper Scissor Lizard Spock Wizard Batman Spiderman Glock'
                 on_press:
                     app.root.transition.direction = 'left'
                     self.set_game_mode(3)
@@ -296,8 +296,8 @@ WindowManager:
             orientation: 'vertical'
             size_hint_x: 0.25
 
-            Label:
-                text: 'Player 1'
+            Player1Name:
+                id: player1_name
                 font_size: 40
 
             BoxLayout:
@@ -313,7 +313,7 @@ WindowManager:
                         font_size: 20
 
                     Label:
-                        text: '0'
+                        id: p1_score
                         font_size: 40
 
                 BoxLayout:
@@ -324,23 +324,19 @@ WindowManager:
                         font_size: 20
 
                     Label:
-                        text: '1'
+                        id: player1_round
                         font_size: 40
 
                 BoxLayout:
                     orientation: 'horizontal'
 
-                    Label:
-                        text: 'Hold on:'
-                        font_size: 20
-
-                    Label:
+                    CountdownClockP1:
                         id: countdown_p1
-                        text: '3'
+                        text: 'Hold on: ' + str(int(round(self.a, 0)))
                         font_size: 40
 
-            Label:
-                text: 'Your turn'
+            Player1Turn:
+                id: player1_turn
                 font_size: 30
 
         BoxLayout:
@@ -362,7 +358,7 @@ WindowManager:
                     allow_stretch: True
 
                 Label:
-                    text: '>'
+                    id: who_won_round
                     width: 160
                     font_size: 60
                     size_hint: None, None
@@ -396,8 +392,8 @@ WindowManager:
             orientation: 'vertical'
             size_hint_x: 0.25
 
-            Label:
-                text: 'Player 2'
+            Player2Name:
+                id: player2_name
                 font_size: 40
 
             BoxLayout:
@@ -413,7 +409,7 @@ WindowManager:
                         font_size: 20
 
                     Label:
-                        text: '0'
+                        id: p2_score
                         font_size: 40
 
                 BoxLayout:
@@ -430,16 +426,13 @@ WindowManager:
                 BoxLayout:
                     orientation: 'horizontal'
 
-                    Label:
-                        text: 'Hold on:'
-                        font_size: 20
-
-                    Label:
-                        text: '3'
+                    CountdownClockP2:
+                        id: countdown_p2
+                        text: 'Hold on: ' + str(int(round(self.a, 0)))
                         font_size: 40
 
-            Label:
-                text: 'Opponent\'s turn'
+            Player2Turn:
+                id: player2_turn
                 font_size: 30
 
 
