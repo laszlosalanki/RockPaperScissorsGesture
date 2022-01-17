@@ -2,7 +2,7 @@ from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
-
+from time import sleep
 from data import constants
 from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture
 from cv2 import cv2
@@ -45,10 +45,19 @@ class GameWindow(Screen):
         super().__init__(**kw)
         Clock.schedule_interval(self.predicted_photo_p1, 0.03)
         Clock.schedule_interval(self.predicted_text_p1, 0.03)
+        # Clock.schedule_once(self.countdown, 10)
 
         # TODO: game
         Clock.schedule_once(self.predicted_photo_p2)
         Clock.schedule_once(self.predicted_text_p2)
+
+    def countdown(self, dt):
+        sec = 3
+        while sec:
+            mins, secs = divmod(sec, 60)
+            print(secs)
+            sleep(1)
+            sec -= 1
 
     def predicted_photo_p1(self, dt):
         global detected_gesture

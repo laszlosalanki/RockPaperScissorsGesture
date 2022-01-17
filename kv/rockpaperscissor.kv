@@ -36,6 +36,7 @@ WindowManager:
             Button:
                 text: 'New Game'
                 on_release:
+                    app.root.transition.direction = 'left'
                     app.root.current = 'newgame'
                 size_hint: None, None
                 size: 160, 50
@@ -44,6 +45,7 @@ WindowManager:
             Button:
                 text: 'Settings'
                 on_release:
+                    app.root.transition.direction = 'left'
                     app.root.current = 'settings'
                 size_hint: None, None
                 size: 160, 50
@@ -52,6 +54,7 @@ WindowManager:
             Button:
                 text: 'Scoreboard'
                 on_release:
+                    app.root.transition.direction = 'left'
                     app.root.current = 'scoreboard'
                 size_hint: None, None
                 size: 160, 50
@@ -93,6 +96,7 @@ WindowManager:
             GameMode1:
                 text: 'Rock Paper Scissor'
                 on_press:
+                    app.root.transition.direction = 'left'
                     self.set_game_mode(1)
                 on_release:
                     app.root.current = 'opponentselectionview'
@@ -103,6 +107,7 @@ WindowManager:
             GameMode2:
                 text: 'Rock Paper Scissor Lizard Spock'
                 on_press:
+                    app.root.transition.direction = 'left'
                     self.set_game_mode(2)
                 on_release:
                     app.root.current = 'opponentselectionview'
@@ -113,6 +118,7 @@ WindowManager:
             GameMode3:
                 text: 'Rock Paper Scissor Lizard Spock Mage Batman Spiderman Glock'
                 on_press:
+                    app.root.transition.direction = 'left'
                     self.set_game_mode(3)
                 on_release:
                     app.root.current = 'opponentselectionview'
@@ -126,6 +132,7 @@ WindowManager:
             Button:
                 text: 'Back'
                 on_release:
+                    app.root.transition.direction = 'right'
                     app.root.current = 'main'
                 size_hint: None, None
                 size: 160, 50
@@ -164,6 +171,7 @@ WindowManager:
                 on_press:
                     self.set_opponent(1)
                 on_release:
+                    app.root.transition.direction = 'left'
                     app.root.current = 'round'
                 size_hint: None, None
                 size: 160, 50
@@ -172,6 +180,7 @@ WindowManager:
             Other:
                 text: 'Other player'
                 on_press:
+                    app.root.transition.direction = 'left'
                     self.set_opponent(2)
                 on_release:
                     app.root.current = 'round'
@@ -184,6 +193,7 @@ WindowManager:
             Button:
                 text: 'Back'
                 on_release:
+                    app.root.transition.direction = 'right'
                     app.root.current = 'newgame'
                 size_hint: None, None
                 size: 160, 50
@@ -223,30 +233,34 @@ WindowManager:
                     text: '3'
                     font_size: 40
                     on_release:
+                        app.root.transition.direction = 'left'
                         app.root.current = 'game'
                     on_press:
                         self.set_rounds(3)
 
-                Round3Button:
+                Round5Button:
                     text: '5'
                     font_size: 40
                     on_release:
+                        app.root.transition.direction = 'left'
                         app.root.current = 'game'
                     on_press:
                         self.set_rounds(5)
 
-                Round3Button:
+                Round7Button:
                     text: '7'
                     font_size: 40
                     on_release:
+                        app.root.transition.direction = 'left'
                         app.root.current = 'game'
                     on_press:
                         self.set_rounds(7)
 
-                Round3Button:
+                Round9Button:
                     text: '9'
                     font_size: 40
                     on_release:
+                        app.root.transition.direction = 'left'
                         app.root.current = 'game'
                     on_press:
                         self.set_rounds(9)
@@ -256,6 +270,7 @@ WindowManager:
             Button:
                 text: 'Back'
                 on_release:
+                    app.root.transition.direction = 'right'
                     app.root.current = 'opponentselectionview'
                 size_hint: None, None
                 size: 160, 50
@@ -320,6 +335,7 @@ WindowManager:
                         font_size: 20
 
                     Label:
+                        id: countdown_p1
                         text: '3'
                         font_size: 40
 
@@ -366,6 +382,7 @@ WindowManager:
                 Button:
                     text: 'Back to Main'
                     on_release:
+                        app.root.transition.direction = 'right'
                         app.root.current = 'main'
                     size_hint: None, None
                     size: 160, 50
@@ -471,15 +488,10 @@ WindowManager:
                     BoxLayout:
                         orientation: 'horizontal'
 
-                        LoggingOffButton:
-                            text: 'Logging off'
-                            on_press:
-                                self.log_off_click()
-
-                        LoggingOnButton:
-                            text: 'Logging on'
-                            on_press:
-                                self.log_on_click()
+                        LoggingSwitch:
+                            id: logging_switch
+                            on_touch_up:
+                                self.save_value_on_touch_up()
 
                     BoxLayout:
                         orientation: 'horizontal'
@@ -521,6 +533,7 @@ WindowManager:
             Button:
                 text: 'Back'
                 on_release:
+                    app.root.transition.direction = 'right'
                     app.root.current = 'main'
                 size_hint: None, None
                 size: 160, 50
@@ -560,6 +573,7 @@ WindowManager:
             Button:
                 text: 'Back'
                 on_release:
+                    app.root.transition.direction = 'right'
                     app.root.current = 'main'
                 size_hint: None, None
                 size: 160, 50
