@@ -9,18 +9,9 @@ from data import constants
 
 filename_with_path = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
 
-# TODO: replace the log buttons with a switch, then update the states
-# TODO: set the slider values to the ones from the settings file
+# TODO: use the actual values in the code
 
 settings = dict()
-
-
-class LoggingSwitch(Switch):
-    def save_value_on_touch_up(self):
-        update_settings_file(filename_with_path,
-                             constants.SETTINGS_IS_LOGGING_ENABLED_KEY,
-                             self.active,
-                             constants.SETTINGS_HEADER)
 
 
 class MinDetectionConfidenceSwitch(Slider):
@@ -56,9 +47,7 @@ class SettingsWindow(Screen):
             #
         #
         for key, value in settings.items():
-            if key == constants.SETTINGS_IS_LOGGING_ENABLED_KEY:
-                self.ids.logging_switch.active = bool(value)
-            elif key == constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY:
+            if key == constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY:
                 self.ids.min_det_conf.value = float(value)
             elif key == constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY:
                 self.ids.min_tra_conf.value = float(value)

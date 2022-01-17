@@ -468,9 +468,6 @@ WindowManager:
                     orientation: 'vertical'
 
                     Label:
-                        text: 'Logging:'
-
-                    Label:
                         text: 'Minimum detection confidence:'
 
                     Label:
@@ -478,14 +475,6 @@ WindowManager:
 
                 BoxLayout:
                     orientation: 'vertical'
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-
-                        LoggingSwitch:
-                            id: logging_switch
-                            on_touch_up:
-                                self.save_value_on_touch_up()
 
                     BoxLayout:
                         orientation: 'horizontal'
