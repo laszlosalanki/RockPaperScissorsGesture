@@ -24,52 +24,16 @@ act_settings_filename = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.AC
 settings_filename = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
 
 
-class Player1Name(Label):
+class Player1Info(Label):
     pass
 
 
-class Player2Name(Label):
-    pass
-
-
-class Player1Turn(Label):
-    pass
-
-
-class Player2Turn(Label):
+class Player2Info(Label):
     pass
 
 
 class CameraFrame(Image):
     pass
-
-
-class CountdownClockP1(Label):
-    a = NumericProperty(5)
-
-    def start_initial_countdown(self):
-        Animation.cancel_all(self)
-        self.anim = Animation(a=0, duration=self.a)
-
-        def finish_callback(animation, incr_crude_clock):
-            incr_crude_clock.text = ""
-
-        self.anim.bind(on_complete=finish_callback)
-        self.anim.start(self)
-
-
-class CountdownClockP2(Label):
-    a = NumericProperty(5)
-
-    def start_initial_countdown(self):
-        Animation.cancel_all(self)
-        self.anim = Animation(a=0, duration=self.a)
-
-        def finish_callback(animation, incr_crude_clock):
-            incr_crude_clock.text = ""
-
-        self.anim.bind(on_complete=finish_callback)
-        self.anim.start(self)
 
 
 class GameWindow(Screen):
@@ -113,8 +77,9 @@ class GameWindow(Screen):
 
         # Initialize webcam and hand detection module (TODO: user should be able to select webcam number)
         self.cap = cv2.VideoCapture(0)
-        self.hd = HandDetection(min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
-                                min_tracking_confidence=float(settings[constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY]))
+        self.hd = HandDetection(
+            min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
+            min_tracking_confidence=float(settings[constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY]))
         # Schedule camera frame update
         Clock.schedule_interval(self.update, 0.03)
 
@@ -153,71 +118,13 @@ class GameWindow(Screen):
                 self.predicted_text_p2()
 
     def on_enter(self, *args):
-        # Start the main countdown until the game actually starts
-        self.ids.countdown_p1.start_initial_countdown()
-        self.ids.countdown_p2.start_initial_countdown()
-        # Game should continue according to the selected opponent
+        # Game should start according to the selected opponent
         if int(act_settings[constants.OPPONENT]) == 1:
-            # Rounds
-            rounds = 1
-            while rounds != int(act_settings[constants.ROUNDS]) + 1:
-                # TODO
-                # Player 1 comes first. Let's set his/her round counter properly.
-                self.ids.player1_round.text = str(rounds)
-                # Set 'Your turn' text.
-                self.ids.player1_turn.text = constants.YOUR_TURN
-                # Countdown, take average of detected gestures
-                # TODO
-                # Player 2 comes next.
-                # Set Player 1's 'Your turn' text to '', and Player 2's to 'Your turn'.
-                self.ids.player1_turn.text = ''
-                self.ids.player2_turn_text = constants.YOUR_TURN
-                # Countdown
-                # TODO
-                # Choose random gesture and display it
-                computer_choice = random.choice(available_gestures)
-                self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[computer_choice]
-                self.ids.gesture_text_p2.text = computer_choice
-                # Compare choices and set arrow
-                p1_won_round = None
-                is_draw = None
-                if detected_gesture == computer_choice:
-                    is_draw = True
-                    self.ids.who_won_round.text = '='
-                elif detected_gesture in constants.WEAKNESSES[computer_choice]:
-                    p1_won_round = True
-                    self.ids.who_won_round.text = '>'
-                else:
-                    p1_won_round = False
-                    self.ids.who_won_round.text = '<'
-                # Set score properly
-                if not is_draw:
-                    if p1_won_round:
-                        self.p1_score = None
-                        if self.ids.p1_score.text == '':
-                            self.p1_score = 1
-                        else:
-                            self.p1_score = int(self.ids.p1_score.text)
-                            self.p1_score += 1
-                        self.ids.p1_score.text = str(self.p1_score)
-                    else:
-                        self.p2_score = None
-                        if self.ids.p2_score.text == '':
-                            self.p2_score = 1
-                        else:
-                            self.p2_score = int(self.ids.p2_score.text)
-                            self.p2_score += 1
-                        self.ids.p2_score.text = str(self.p2_score)
-
-                # Wait
-                # TODO
-                # Next round
-                rounds += 1
+            # TODO: Against other player
+            pass
         else:
             # TODO: Against other player
-            rounds = 1
-            while rounds != int(act_settings[constants.ROUNDS]) + 1:
-                pass
+            pass
 
     def predicted_photo_p1(self):
         global detected_gesture
@@ -243,4 +150,11 @@ class GameWindow(Screen):
 
     def on_pre_leave(self, *args):
         self.cap.release()
+        Clock.schedule_once(self.init)
+        global detected_gesture, player_1s_turn, available_gestures, act_settings, settings
+        detected_gesture = None
+        player_1s_turn = True
+        available_gestures = None
+        act_settings = dict()
+        settings = dict()
         # TODO: save results, so it can be displayed later in Scoreboard window

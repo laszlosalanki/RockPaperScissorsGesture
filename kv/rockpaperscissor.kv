@@ -222,7 +222,7 @@ WindowManager:
             orientation: 'vertical'
 
             Label:
-                text: 'Enter your user name'
+                text: 'Enter your username'
                 font_size: 60
 
             Label:
@@ -230,36 +230,57 @@ WindowManager:
             BoxLayout:
                 orientation: 'horizontal'
 
-                Label:
-                    text: 'Player 1\'s user name:'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 10
+                    padding: 20
 
-                TextInput:
-                    id: player1_username
-                    size_hint: None, None
-                    size: 400, 50
-                    multiline: False
-                    pos_hint: {'center_y': 0.5}
+                    Label:
+                        text: 'Player 1\'s username:'
+                        size_hint_y: None
+                        height: 50
+                        multiline: False
 
-            BoxLayout:
-                orientation: 'horizontal'
+                    Label:
+                        text: 'Player 2\'s username:'
+                        size_hint_y: None
+                        height: 50
+                        multiline: False
 
-                Label:
-                    text: 'Player 2\'s user name:'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 10
+                    padding: 20
 
-                TextInput:
-                    id: player2_username
-                    size_hint: None, None
-                    size: 400, 50
-                    multiline: False
-                    pos_hint: {'center_y': 0.5}
+                    TextInput:
+                        id: player1_username
+                        size_hint_y: None
+                        height: 50
+                        multiline: False
+
+                    TextInput:
+                        id: player2_username
+                        multiline: False
+                        size_hint_y: None
+                        height: 50
 
             Label:
 
             Label:
-                text: 'If you\'re against the computer, you should not fill the second input field'
+                text: 'If you\'re against the computer, you should not fill the second input field.\n Also, you can leave both empty, in that case the default names will be applied.'
 
             BoxLayout:
                 orientation: 'horizontal'
+
+                Button:
+                    text: 'Back'
+                    on_release:
+                        app.root.transition.direction = 'right'
+                        app.root.current = 'opponentselectionview'
+                    size_hint: None, None
+                    size: 160, 50
+
+                Label:
 
                 NextButton:
                     text: 'Next'
@@ -268,14 +289,6 @@ WindowManager:
                         app.root.current = 'round'
                     on_press:
                         self.save_username(player1_username.text, player2_username.text)
-                    size_hint: None, None
-                    size: 160, 50
-
-                Button:
-                    text: 'Back'
-                    on_release:
-                        app.root.transition.direction = 'right'
-                        app.root.current = 'opponentselectionview'
                     size_hint: None, None
                     size: 160, 50
 
@@ -376,7 +389,7 @@ WindowManager:
             orientation: 'vertical'
             size_hint_x: 0.25
 
-            Player1Name:
+            Label:
                 id: player1_name
                 font_size: 40
 
@@ -410,13 +423,12 @@ WindowManager:
                 BoxLayout:
                     orientation: 'horizontal'
 
-                    CountdownClockP1:
+                    Label:
                         id: countdown_p1
-                        text: 'Hold on: ' + str(int(round(self.a, 0)))
-                        font_size: 40
+                        font_size: 20
 
-            Player1Turn:
-                id: player1_turn
+            Player1Info:
+                id: player1_info
                 font_size: 30
 
         BoxLayout:
@@ -472,7 +484,7 @@ WindowManager:
             orientation: 'vertical'
             size_hint_x: 0.25
 
-            Player2Name:
+            Label:
                 id: player2_name
                 font_size: 40
 
@@ -506,13 +518,12 @@ WindowManager:
                 BoxLayout:
                     orientation: 'horizontal'
 
-                    CountdownClockP2:
+                    Label:
                         id: countdown_p2
-                        text: 'Hold on: ' + str(int(round(self.a, 0)))
-                        font_size: 40
+                        font_size: 20
 
-            Player2Turn:
-                id: player2_turn
+            Player2Info:
+                id: player2_info
                 font_size: 30
 
 
@@ -589,9 +600,6 @@ WindowManager:
                             size_hint_x: 0.3
 
             Label:
-
-            Label:
-                text: 'Changes will take effect after restart.'
 
             Button:
                 text: 'Back'
