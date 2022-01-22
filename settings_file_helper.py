@@ -36,3 +36,18 @@ def create_settings_file(file_with_path, header=constants.ACT_GAME_SETTINGS_HEAD
         settings_file.write(header)
         settings_file.write('\n')
     #
+
+
+def read_into_dict(filename, d=None):
+    if d is None:
+        d = dict()
+    with open(filename, 'r') as settings_file:
+        file_lines = settings_file.readlines()[1:]
+        for line in file_lines:
+            line_parts = line.split(' ')
+            line_parts[0] = line_parts[0] + ' '
+            line_parts[1] = ' '.join(line_parts[1:])
+            d[line_parts[0]] = line_parts[1].strip()
+        #
+    #
+    return d

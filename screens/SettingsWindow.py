@@ -1,15 +1,11 @@
 from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
 from kivy.uix.slider import Slider
-from kivy.uix.switch import Switch
-from kivy.uix.textinput import TextInput
 
 from settings_file_helper import update_settings_file
 from data import constants
 
 filename_with_path = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
-
-# TODO: use the actual values in the code
 
 settings = dict()
 

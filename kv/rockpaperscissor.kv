@@ -2,6 +2,7 @@ WindowManager:
     MainMenuWindow:
     NewGameWindow:
     OpponentSelectionViewWindow:
+    UserNameInputScreen:
     RoundSelectionViewWindow:
     GameWindow:
     SettingsWindow:
@@ -172,7 +173,7 @@ WindowManager:
                     self.set_opponent(1)
                 on_release:
                     app.root.transition.direction = 'left'
-                    app.root.current = 'round'
+                    app.root.current = 'username'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
@@ -183,7 +184,7 @@ WindowManager:
                     app.root.transition.direction = 'left'
                     self.set_opponent(2)
                 on_release:
-                    app.root.current = 'round'
+                    app.root.current = 'username'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
@@ -198,6 +199,85 @@ WindowManager:
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
+
+        Label:
+
+<UserNameInputScreen>:
+    name: 'username'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        Label:
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Enter your user name'
+                font_size: 60
+
+            Label:
+
+            BoxLayout:
+                orientation: 'horizontal'
+
+                Label:
+                    text: 'Player 1\'s user name:'
+
+                TextInput:
+                    id: player1_username
+                    size_hint: None, None
+                    size: 400, 50
+                    multiline: False
+                    pos_hint: {'center_y': 0.5}
+
+            BoxLayout:
+                orientation: 'horizontal'
+
+                Label:
+                    text: 'Player 2\'s user name:'
+
+                TextInput:
+                    id: player2_username
+                    size_hint: None, None
+                    size: 400, 50
+                    multiline: False
+                    pos_hint: {'center_y': 0.5}
+
+            Label:
+
+            Label:
+                text: 'If you\'re against the computer, you should not fill the second input field'
+
+            BoxLayout:
+                orientation: 'horizontal'
+
+                NextButton:
+                    text: 'Next'
+                    on_release:
+                        app.root.transition.direction = 'left'
+                        app.root.current = 'round'
+                    on_press:
+                        self.save_username(player1_username.text, player2_username.text)
+                    size_hint: None, None
+                    size: 160, 50
+
+                Button:
+                    text: 'Back'
+                    on_release:
+                        app.root.transition.direction = 'right'
+                        app.root.current = 'opponentselectionview'
+                    size_hint: None, None
+                    size: 160, 50
 
         Label:
 
@@ -271,7 +351,7 @@ WindowManager:
                 text: 'Back'
                 on_release:
                     app.root.transition.direction = 'right'
-                    app.root.current = 'opponentselectionview'
+                    app.root.current = 'username'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}

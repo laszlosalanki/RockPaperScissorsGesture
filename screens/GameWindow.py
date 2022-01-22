@@ -11,24 +11,17 @@ from data import constants
 from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture
 from cv2 import cv2
 
+from settings_file_helper import read_into_dict
+
 detected_gesture = None
 player_1s_turn = True
 available_gestures = None
+
 act_settings = dict()
+settings = dict()
+
 act_settings_filename = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
-
-
-def read_act_game_settings():
-    global act_settings
-    with open(act_settings_filename, 'r') as settings:
-        act_settings_lines = settings.readlines()[1:]
-        for line in act_settings_lines:
-            line_parts = line.split(' ')
-            line_parts[0] = line_parts[0] + ' '
-            line_parts[1] = ' '.join(line_parts[1:])
-            act_settings[line_parts[0]] = line_parts[1].strip()
-        #
-    #
+settings_filename = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
 
 
 class Player1Name(Label):
@@ -98,7 +91,10 @@ class GameWindow(Screen):
 
     def on_pre_enter(self, *args):
         # Read ACT_SETTINGS file
-        read_act_game_settings()
+        global act_settings
+        act_settings = read_into_dict(act_settings_filename)
+        global settings
+        settings = read_into_dict(settings_filename)
         # Set player names according to the selected opponent
         self.ids.player1_name.text = act_settings[constants.USERNAME]
         if int(act_settings[constants.OPPONENT]) == 1:
@@ -117,7 +113,8 @@ class GameWindow(Screen):
 
         # Initialize webcam and hand detection module (TODO: user should be able to select webcam number)
         self.cap = cv2.VideoCapture(0)
-        self.hd = HandDetection()
+        self.hd = HandDetection(min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
+                                min_tracking_confidence=float(settings[constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY]))
         # Schedule camera frame update
         Clock.schedule_interval(self.update, 0.03)
 
@@ -178,7 +175,7 @@ class GameWindow(Screen):
                 # Countdown
                 # TODO
                 # Choose random gesture and display it
-                computer_choice = random.choice(constants.ALL_CHOICES)
+                computer_choice = random.choice(available_gestures)
                 self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[computer_choice]
                 self.ids.gesture_text_p2.text = computer_choice
                 # Compare choices and set arrow
@@ -218,7 +215,9 @@ class GameWindow(Screen):
                 rounds += 1
         else:
             # TODO: Against other player
-            pass
+            rounds = 1
+            while rounds != int(act_settings[constants.ROUNDS]) + 1:
+                pass
 
     def predicted_photo_p1(self):
         global detected_gesture
@@ -244,4 +243,4 @@ class GameWindow(Screen):
 
     def on_pre_leave(self, *args):
         self.cap.release()
-        # TODO: save results, so it can be displayed under Scoreboard window
+        # TODO: save results, so it can be displayed later in Scoreboard window
