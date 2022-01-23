@@ -264,7 +264,7 @@ class GameWindow(Screen):
 
     def is_finished(self, dt):
         if winner:
-            App.get_running_app().root.current = 'main'
+            App.get_running_app().root.current = 'scoreboard'
 
     def predicted_photo_p1(self):
         global detected_gesture
@@ -316,7 +316,8 @@ class GameWindow(Screen):
         can_show_live_image = True
         player_1s_turn = True
         if should_save_history_file:
-            now = datetime.now().strftime('%Y-%m-%d_%H_%M_%S')
+            now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+            game_data[constants.HISTORY_TIME] = now
             history_filename_with_path = constants.HISTORY_RELATIVE_PATH + now + constants.HISTORY_FILENAME_ENDING
             json_str = dumps(game_data)
             with open(history_filename_with_path, 'w') as history_file:

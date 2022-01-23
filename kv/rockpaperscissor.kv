@@ -637,24 +637,63 @@ WindowManager:
             source: 'images/background_main.jpg'
 
     BoxLayout:
-        orientation: 'horizontal'
+        orientation: 'vertical'
         spacing: 10
         padding: 20
 
         Label:
+            text: 'Scoreboard'
+            font_size: 60
+            size_hint_y: 0.2
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.1
+
+            Label:
+                text: 'Time'
+                font_size: 16
+
+            Label:
+                text: 'Play time'
+                font_size: 16
+
+            Label:
+                text: 'Player 1 name'
+                font_size: 16
+
+            Label:
+                text: 'Player 1\'s score'
+                font_size: 16
+
+            Label:
+                text: 'Player 2 name'
+                font_size: 16
+
+            Label:
+                text: 'Player 2\'s score'
+                font_size: 16
+
+            Label:
+                text: 'Winner'
+                font_size: 16
+
+            Label:
+                text: 'Rounds played'
+                font_size: 16
+
+        ScrollView:
+            id: history_scroll
+
+            BoxLayout:
+                id: history_container
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
 
         BoxLayout:
             orientation: 'vertical'
-
-            Label:
-                text: 'Scoreboard'
-                font_size: 60
-
-            Label:
-
-            Label:
-
-            Label:
+            size_hint_y: 0.1
 
             Button:
                 text: 'Back'
@@ -664,5 +703,3 @@ WindowManager:
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
-
-        Label:
