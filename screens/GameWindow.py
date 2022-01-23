@@ -1,9 +1,6 @@
 import random
 import operator
-
-import kivy.clock
-from kivy.app import App
-from kivy.uix.button import Button
+from json import dumps
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
@@ -12,14 +9,17 @@ from data import constants
 from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture
 from cv2 import cv2
 import asynckivy as ak
-
+from datetime import datetime
 from settings_file_helper import read_into_dict
 
 detected_gesture = None
 detected_gesture_list = list()
 player_1s_turn = True
-available_gestures = None
+available_gestures = list()
 can_show_live_image = True
+should_save_history_file = True
+
+game_data = dict()
 
 winner = None
 p1_score = 0
@@ -81,18 +81,21 @@ class GameWindow(Screen):
         act_settings = read_into_dict(act_settings_filename)
         global settings
         settings = read_into_dict(settings_filename)
-
+        global game_data
         # Set player names according to the selected opponent
         self.ids.player1_name.text = act_settings[constants.USERNAME]
+        game_data[constants.HISTORY_PLAYER_1] = act_settings[constants.USERNAME]
         if int(act_settings[constants.OPPONENT]) == 1:
             self.ids.player2_name.text = random.choice(constants.COMPUTER_NAMES)
+            game_data[constants.HISTORY_PLAYER_2] = self.ids.player2_name.text
         else:
             self.ids.player2_name.text = act_settings[constants.USERNAME_2]
-
+            game_data[constants.HISTORY_PLAYER_2] = act_settings[constants.USERNAME_2]
+        game_data[constants.HISTORY_OPPONENT] = int(act_settings[constants.OPPONENT])
         # Init round
         self.ids.player1_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
         self.ids.player2_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
-
+        game_data[constants.HISTORY_SELECTED_ROUNDS] = int(act_settings[constants.ROUNDS])
         # Set the available gestures according to the selected game mode
         global available_gestures
         if int(act_settings[constants.GAME_MODE]) == 1:
@@ -101,7 +104,7 @@ class GameWindow(Screen):
             available_gestures = constants.GAME_MODE_2_CHOICES
         else:
             available_gestures = constants.GAME_MODE_3_CHOICES
-
+        game_data[constants.HISTORY_GAME_MODE] = int(act_settings[constants.GAME_MODE])
         # Initialize webcam and hand detection module (TODO: user should be able to select webcam number)
         self.cap = cv2.VideoCapture(int(settings[constants.SETTINGS_CAMERA_DEVICE_KEY]))
         self.hd = HandDetection(
@@ -147,15 +150,16 @@ class GameWindow(Screen):
                     self.predicted_text_p2()
 
     async def computer_game(self):
+        global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image, \
+            winner, should_save_history_file
         try:
-            global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image, winner
-            rounds = 1
+            self.rounds = 1
             self.p1_choice = None
             self.p2_choice = None
-            while rounds != int(act_settings[constants.ROUNDS]) + 1:
+            while self.rounds != int(act_settings[constants.ROUNDS]) + 1:
                 detected_gesture_list.clear()
-                self.ids.player1_round.text = str(rounds) + ' / ' + str(act_settings[constants.ROUNDS])
-                self.ids.player2_round.text = str(rounds) + ' / ' + str(act_settings[constants.ROUNDS])
+                self.ids.player1_round.text = str(self.rounds) + ' / ' + str(act_settings[constants.ROUNDS])
+                self.ids.player2_round.text = str(self.rounds) + ' / ' + str(act_settings[constants.ROUNDS])
                 # Player 1
                 self.ids.player1_info.text = 'Your turn'
                 await ak.sleep(3)
@@ -202,11 +206,11 @@ class GameWindow(Screen):
                         self.ids.who_won_round.text = '='
                     elif self.p1_choice in constants.WEAKNESSES[self.p2_choice]:
                         p1_score += 1
-                        rounds += 1
+                        self.rounds += 1
                         self.ids.who_won_round.text = '>'
                     elif self.p2_choice in constants.WEAKNESSES[self.p1_choice]:
                         p2_score += 1
-                        rounds += 1
+                        self.rounds += 1
                         self.ids.who_won_round.text = '<'
                 self.ids.p1_score.text = str(p1_score)
                 self.ids.p2_score.text = str(p2_score)
@@ -220,9 +224,13 @@ class GameWindow(Screen):
                 winner = 'Computer (' + self.ids.player2_name.text + ')'
             Clock.unschedule(self.game_time_schedule)
         except GeneratorExit:
+            should_save_history_file = False
             raise
         finally:
-            pass
+            game_data[constants.HISTORY_PLAYED_ROUNDS] = self.rounds-1
+            game_data[constants.HISTORY_PLAYER_1_SCORE] = p1_score
+            game_data[constants.HISTORY_PLAYER_2_SCORE] = p2_score
+            game_data[constants.HISTORY_WINNER] = winner
 
     def init_countdown(self, dt):
         if self.init_countdown_cnt > 0:
@@ -254,7 +262,7 @@ class GameWindow(Screen):
 
     def is_finished(self, dt):
         if winner:
-            # TODO: save result and navigate to main menu or scoreboard
+            # TODO: navigate to scoreboard
             pass
 
     def predicted_photo_p1(self):
@@ -280,12 +288,15 @@ class GameWindow(Screen):
             self.ids.gesture_text_p2.text = detected_gesture
 
     def cancel_things(self, instance):
+        global should_save_history_file
         Clock.unschedule(self.game_time_schedule)
+        game_data[constants.HISTORY_PLAY_TIME] = game_time_in_secs
         Clock.unschedule(self.update_schedule)
         Clock.unschedule(self.finished_schedule)
         if game_time_in_secs < 7:
             Clock.unschedule(self.init_cntdwn)
             Clock.unschedule(self.computer_game_schedule)
+            should_save_history_file = False
         else:
             self.computer_game_task.cancel()
 
@@ -302,3 +313,10 @@ class GameWindow(Screen):
         winner = None
         can_show_live_image = True
         player_1s_turn = True
+        if should_save_history_file:
+            now = datetime.now().strftime('%Y-%m-%d_%H_%M_%S')
+            history_filename_with_path = constants.HISTORY_RELATIVE_PATH + now + constants.HISTORY_FILENAME_ENDING
+            json_str = dumps(game_data)
+            with open(history_filename_with_path, 'w') as history_file:
+                history_file.write(json_str)
+            #
