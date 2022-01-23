@@ -1,35 +1,33 @@
 import random
+import operator
 
-from kivy.animation import Animation
-from kivy.properties import NumericProperty
+from kivy.app import App
 from kivy.uix.image import Image
-from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
 from data import constants
 from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture
 from cv2 import cv2
+import asynckivy as ak
 
 from settings_file_helper import read_into_dict
 
 detected_gesture = None
+detected_gesture_list = list()
 player_1s_turn = True
 available_gestures = None
+can_show_live_image = True
+
+winner = None
+p1_score = 0
+p2_score = 0
 
 act_settings = dict()
 settings = dict()
 
 act_settings_filename = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
 settings_filename = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
-
-
-class Player1Info(Label):
-    pass
-
-
-class Player2Info(Label):
-    pass
 
 
 class CameraFrame(Image):
@@ -52,6 +50,11 @@ class GameWindow(Screen):
         # Init detected labels
         self.ids.gesture_text_p1.text = constants.LOG_NO_HAND
         self.ids.gesture_text_p2.text = constants.LOG_NO_HAND
+        # Init score
+        self.ids.p1_score.text = '0'
+        self.ids.p2_score.text = '0'
+        # Counter for initial countdown
+        self.init_countdown_cnt = 5
 
     def on_pre_enter(self, *args):
         # Read ACT_SETTINGS file
@@ -61,6 +64,9 @@ class GameWindow(Screen):
         settings = read_into_dict(settings_filename)
         # Set player names according to the selected opponent
         self.ids.player1_name.text = act_settings[constants.USERNAME]
+        # Init round
+        self.ids.player1_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
+        self.ids.player2_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
         if int(act_settings[constants.OPPONENT]) == 1:
             self.ids.player2_name.text = random.choice(constants.COMPUTER_NAMES)
         else:
@@ -88,7 +94,7 @@ class GameWindow(Screen):
             success, image = self.cap.read()
             (processed_image, landmarks) = self.hd.find_hand_positions(image)
 
-            global detected_gesture
+            global detected_gesture, detected_gesture_list
 
             if landmarks:
                 data = get_coordinates_by_hand(landmarks, 0, processed_image.shape[1], processed_image.shape[0])
@@ -98,6 +104,7 @@ class GameWindow(Screen):
                     detected_gesture = gesture
                 else:
                     detected_gesture = constants.LOG_CANNOT_RECOGNISE_GESTURE
+                detected_gesture_list.append(detected_gesture)
                 print(constants.LOG_TEMPLATE, constants.LOG_PREDICTED_GESTURE, detected_gesture)
             else:
                 detected_gesture = constants.LOG_NO_HAND
@@ -109,21 +116,115 @@ class GameWindow(Screen):
 
             self.ids.camera_frame.texture = texture
 
-            # TODO: should set elsewhere
-            if player_1s_turn:
+            if player_1s_turn and can_show_live_image:
                 self.predicted_photo_p1()
                 self.predicted_text_p1()
             else:
-                self.predicted_photo_p2()
-                self.predicted_text_p2()
+                if int(act_settings[constants.OPPONENT]) != 1:
+                    self.predicted_photo_p2()
+                    self.predicted_text_p2()
+
+    async def computer_game(self):
+        global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image, winner
+        rounds = 1
+        self.p1_choice = None
+        self.p2_choice = None
+        while rounds != int(act_settings[constants.ROUNDS]) + 1:
+            detected_gesture_list.clear()
+            self.ids.player1_round.text = str(rounds) + ' / ' + str(act_settings[constants.ROUNDS])
+            self.ids.player2_round.text = str(rounds) + ' / ' + str(act_settings[constants.ROUNDS])
+            # Player 1
+            self.ids.player1_info.text = 'Your turn'
+            await ak.sleep(3)
+            self.ids.player1_info.text = 'Stay still!'
+            await ak.sleep(2)
+            detected_gesture_list.clear()
+
+            for i in range(5):
+                self.ids.countdown_p1.text = str((i + 1) % 6)
+                await ak.sleep(1)
+            self.ids.countdown_p1.text = ''
+            self.ids.player1_info.text = ''
+
+            gesture_stats = dict()
+            for gesture in detected_gesture_list:
+                if gesture not in gesture_stats:
+                    gesture_stats[gesture] = 1
+                else:
+                    gesture_stats[gesture] = gesture_stats[gesture] + 1
+            #
+            print(gesture_stats)
+            detected_gesture_list.clear()
+            if len(gesture_stats.keys()) < 1:
+                self.p1_choice = constants.LOG_NO_HAND
+            else:
+                self.p1_choice = max(gesture_stats.items(), key=operator.itemgetter(1))[0]
+
+            player_1s_turn = False
+            can_show_live_image = False
+            self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[self.p1_choice]
+            self.ids.gesture_text_p1.text = self.p1_choice
+
+            # Player 2
+            self.ids.player2_info.text = 'Your turn'
+            await ak.sleep(3)
+            player_1s_turn = True
+            computer_choice = random.choice(available_gestures)
+            self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[computer_choice]
+            self.ids.gesture_text_p2.text = computer_choice
+            self.p2_choice = computer_choice
+            await ak.sleep(3)
+            self.ids.player2_info.text = ''
+            if self.p1_choice != constants.LOG_CANNOT_RECOGNISE_GESTURE and self.p1_choice != constants.LOG_NO_HAND:
+                if self.p1_choice == self.p2_choice:
+                    self.ids.who_won_round.text = '='
+                elif self.p1_choice in constants.WEAKNESSES[self.p2_choice]:
+                    p1_score += 1
+                    rounds += 1
+                    self.ids.who_won_round.text = '>'
+                elif self.p2_choice in constants.WEAKNESSES[self.p1_choice]:
+                    p2_score += 1
+                    rounds += 1
+                    self.ids.who_won_round.text = '<'
+            self.ids.p1_score.text = str(p1_score)
+            self.ids.p2_score.text = str(p2_score)
+            detected_gesture_list.clear()
+            await ak.sleep(5)
+            self.ids.who_won_round.text = ''
+            can_show_live_image = True
+        if p1_score > p2_score:
+            winner = act_settings[constants.USERNAME]
+        else:
+            winner = 'Computer (' + self.ids.player2_name.text + ')'
+
+    def init_countdown(self, dt):
+        if self.init_countdown_cnt > 0:
+            self.ids.countdown_p1.text = str(self.init_countdown_cnt)
+            self.ids.countdown_p2.text = str(self.init_countdown_cnt)
+            self.init_countdown_cnt -= 1
+        elif self.init_countdown_cnt == 0:
+            self.ids.countdown_p1.text = ''
+            self.ids.countdown_p2.text = ''
+            self.ids.player1_info.text = 'Get ready!'
+            self.ids.player2_info.text = 'Get ready!'
+
+    def task_helper(self, dt):
+        ak.start(self.computer_game())
 
     def on_enter(self, *args):
+        # Initial countdown
+        init_cntdwn = Clock.schedule_interval(self.init_countdown, 1)
+        Clock.schedule_once(lambda l: Clock.unschedule(init_cntdwn), 7)
         # Game should start according to the selected opponent
         if int(act_settings[constants.OPPONENT]) == 1:
-            # TODO: Against other player
-            pass
+            Clock.schedule_once(self.task_helper, 7)
         else:
             # TODO: Against other player
+            pass
+        Clock.schedule_interval(self.is_finished, 2)
+
+    def is_finished(self, dt):
+        if winner:
             pass
 
     def predicted_photo_p1(self):
@@ -149,12 +250,16 @@ class GameWindow(Screen):
             self.ids.gesture_text_p2.text = detected_gesture
 
     def on_pre_leave(self, *args):
+        global p1_score, p2_score, can_show_live_image, winner
         self.cap.release()
         Clock.schedule_once(self.init)
         global detected_gesture, player_1s_turn, available_gestures, act_settings, settings
         detected_gesture = None
+        detected_gesture_list.clear()
+        p1_score = 0
+        p2_score = 0
+        winner = None
+        can_show_live_image = True
         player_1s_turn = True
-        available_gestures = None
-        act_settings = dict()
-        settings = dict()
         # TODO: save results, so it can be displayed later in Scoreboard window
+        # TODO: unschedule every Clock event
