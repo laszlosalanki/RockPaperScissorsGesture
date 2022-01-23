@@ -51,6 +51,7 @@ class CameraSelectionButton(Button):
                              constants.SETTINGS_CAMERA_DEVICE_KEY,
                              instance.text,
                              constants.SETTINGS_HEADER)
+        settings[constants.SETTINGS_CAMERA_DEVICE_KEY] = instance.text
         self.popupWindow.dismiss()
 
     def on_button_click(self):
@@ -63,7 +64,7 @@ class CameraSelectionButton(Button):
         self.popupWindow = Popup()
         self.popupWindow.title = 'Select your camera device:'
         self.popupWindow.size_hint = (None, None)
-        self.popupWindow.size = (600, 400)
+        self.popupWindow.size = (400, 100)
         self.popupWindow.content = box_layout
         self.popupWindow.open()
 
@@ -73,6 +74,9 @@ class SettingsWindow(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
         Clock.schedule_once(self.read_settings_file, 1)
+
+    def keep_up_to_date(self, dt):
+        self.ids.cam_device_label.text = 'Selected: ' + settings[constants.SETTINGS_CAMERA_DEVICE_KEY]
 
     def read_settings_file(self, dt):
         global settings
@@ -89,3 +93,8 @@ class SettingsWindow(Screen):
                 self.ids.min_det_conf.value = float(value)
             elif key == constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY:
                 self.ids.min_tra_conf.value = float(value)
+            elif key == constants.SETTINGS_CAMERA_DEVICE_KEY:
+                self.keep_up_to_date_schedule = Clock.schedule_interval(self.keep_up_to_date, 2)
+
+    def on_pre_leave(self, *args):
+        Clock.unschedule(self.keep_up_to_date_schedule)
