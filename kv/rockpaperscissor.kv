@@ -7,6 +7,7 @@ WindowManager:
     GameWindow:
     SettingsWindow:
     ScoreboardWindow:
+    HelpMain:
 
 <MainMenuWindow>:
     name: 'main'
@@ -57,6 +58,15 @@ WindowManager:
                 on_release:
                     app.root.transition.direction = 'left'
                     app.root.current = 'scoreboard'
+                size_hint: None, None
+                size: 160, 50
+                pos_hint: {'center_x': 0.5}
+
+            Button:
+                text: 'Help'
+                on_release:
+                    app.root.transition.direction = 'left'
+                    app.root.current = 'help'
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
@@ -692,8 +702,57 @@ WindowManager:
                 height: self.minimum_height
 
         BoxLayout:
-            orientation: 'vertical'
+            orientation: 'horizontal'
+            padding: 20
+            spacing: 10
             size_hint_y: 0.1
+
+            Label:
+
+            Button:
+                text: 'Back'
+                on_release:
+                    app.root.transition.direction = 'right'
+                    app.root.current = 'main'
+                size_hint: None, None
+                size: 160, 50
+
+            Button:
+                id: clear_history_button
+                text: 'Clear'
+                size_hint: None, None
+                size: 160, 50
+
+            Label:
+
+<HelpMain>:
+    name: 'help'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background_main.jpg'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        padding: 20
+
+        Label:
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Help'
+                font_size: 60
+
+            Label:
+
+            Label:
+
+            Label:
 
             Button:
                 text: 'Back'
@@ -703,3 +762,5 @@ WindowManager:
                 size_hint: None, None
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
+
+        Label:

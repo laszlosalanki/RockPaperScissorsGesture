@@ -14,6 +14,7 @@ from screens.GameWindow import GameWindow
 from screens.ScoreboardWindow import ScoreboardWindow
 from screens.SettingsWindow import SettingsWindow
 from screens.UserNameInputScreen import UserNameInputScreen
+from screens.help.HelpMain import HelpMain
 from screens.WindowManager import WindowManager
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget

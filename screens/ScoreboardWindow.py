@@ -1,8 +1,9 @@
+from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
-from os import listdir
+from os import listdir, remove
 from os.path import isfile, join, abspath
 from json import load
 
@@ -29,6 +30,18 @@ def read_file(file):
 
 
 class ScoreboardWindow(Screen):
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        Clock.schedule_once(self.bind_clear_button)
+
+    def bind_clear_button(self, dt):
+        self.ids.clear_history_button.bind(on_release=self.on_clear_click)
+
+    def on_clear_click(self, instance):
+        for file in files:
+            remove(file)
+        App.get_running_app().root.current = 'main'
 
     def on_pre_enter(self, *args):
         self.__init__()
