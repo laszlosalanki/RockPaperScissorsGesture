@@ -156,12 +156,13 @@ class GameWindow(Screen):
             winner, should_save_history_file
         try:
             self.rounds = 1
+            self.rounds_actually = 1
             self.p1_choice = None
             self.p2_choice = None
             while self.rounds != int(act_settings[constants.ROUNDS]) + 1:
                 detected_gesture_list.clear()
-                self.ids.player1_round.text = str(self.rounds) + ' / ' + str(act_settings[constants.ROUNDS])
-                self.ids.player2_round.text = str(self.rounds) + ' / ' + str(act_settings[constants.ROUNDS])
+                self.ids.player1_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
+                self.ids.player2_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 # Player 1
                 self.ids.player1_info.text = 'Your turn'
                 await ak.sleep(3)
@@ -206,13 +207,16 @@ class GameWindow(Screen):
                 if self.p1_choice != constants.LOG_CANNOT_RECOGNISE_GESTURE and self.p1_choice != constants.LOG_NO_HAND:
                     if self.p1_choice == self.p2_choice:
                         self.ids.who_won_round.text = '='
+                        self.rounds_actually += 1
                     elif self.p1_choice in constants.WEAKNESSES[self.p2_choice]:
                         p1_score += 1
                         self.rounds += 1
+                        self.rounds_actually += 1
                         self.ids.who_won_round.text = '>'
                     elif self.p2_choice in constants.WEAKNESSES[self.p1_choice]:
                         p2_score += 1
                         self.rounds += 1
+                        self.rounds_actually += 1
                         self.ids.who_won_round.text = '<'
                 self.ids.p1_score.text = str(p1_score)
                 self.ids.p2_score.text = str(p2_score)
@@ -229,7 +233,7 @@ class GameWindow(Screen):
             should_save_history_file = False
             raise
         finally:
-            game_data[constants.HISTORY_PLAYED_ROUNDS] = self.rounds-1
+            game_data[constants.HISTORY_PLAYED_ROUNDS] = self.rounds_actually-1
             game_data[constants.HISTORY_PLAYER_1_SCORE] = p1_score
             game_data[constants.HISTORY_PLAYER_2_SCORE] = p2_score
             game_data[constants.HISTORY_WINNER] = winner
