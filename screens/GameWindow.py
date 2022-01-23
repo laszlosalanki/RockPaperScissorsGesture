@@ -1,6 +1,8 @@
 import random
 import operator
 from json import dumps
+
+from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
@@ -105,7 +107,7 @@ class GameWindow(Screen):
         else:
             available_gestures = constants.GAME_MODE_3_CHOICES
         game_data[constants.HISTORY_GAME_MODE] = int(act_settings[constants.GAME_MODE])
-        # Initialize webcam and hand detection module (TODO: user should be able to select webcam number)
+        # Initialize webcam and hand detection module
         self.cap = cv2.VideoCapture(int(settings[constants.SETTINGS_CAMERA_DEVICE_KEY]))
         self.hd = HandDetection(
             min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
@@ -262,8 +264,7 @@ class GameWindow(Screen):
 
     def is_finished(self, dt):
         if winner:
-            # TODO: navigate to scoreboard
-            pass
+            App.get_running_app().root.current = 'main'
 
     def predicted_photo_p1(self):
         global detected_gesture
@@ -288,7 +289,7 @@ class GameWindow(Screen):
             self.ids.gesture_text_p2.text = detected_gesture
 
     def cancel_things(self, instance):
-        global should_save_history_file
+        global should_save_history_file, game_data, game_time_in_secs
         Clock.unschedule(self.game_time_schedule)
         game_data[constants.HISTORY_PLAY_TIME] = game_time_in_secs
         Clock.unschedule(self.update_schedule)
@@ -301,6 +302,7 @@ class GameWindow(Screen):
             self.computer_game_task.cancel()
 
     def on_pre_leave(self, *args):
+        self.cancel_things(None)
         global p1_score, p2_score, can_show_live_image, winner, game_time_in_secs
         self.cap.release()
         Clock.schedule_once(self.init)
