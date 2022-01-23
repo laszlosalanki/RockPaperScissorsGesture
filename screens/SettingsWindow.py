@@ -2,12 +2,10 @@ from cv2 import cv2
 from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from kivy.uix.slider import Slider
 import asynckivy as ak
-from kivy.uix.stacklayout import StackLayout
 
 from settings_file_helper import update_settings_file
 from data import constants

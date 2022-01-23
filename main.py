@@ -36,10 +36,6 @@ def create_settings_file_with_default_values():
     create_settings_file(settings_file,
                          constants.SETTINGS_HEADER)
     update_settings_file(settings_file,
-                         constants.SETTINGS_IS_LOGGING_ENABLED_KEY,
-                         constants.SETTINGS_IS_LOGGING_ENABLED_DEFAULT_VALUE,
-                         constants.SETTINGS_HEADER)
-    update_settings_file(settings_file,
                          constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY,
                          constants.SETTINGS_MIN_DETECTION_CONFIDENCE_DEFAULT_VALUE,
                          constants.SETTINGS_HEADER)
