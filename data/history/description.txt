@@ -1,0 +1,2 @@
+All information of your previously player matches can be found in this folder in json form.
+You can also view them in Main/Scoreboard window.
