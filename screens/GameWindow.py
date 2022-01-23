@@ -62,15 +62,17 @@ class GameWindow(Screen):
         act_settings = read_into_dict(act_settings_filename)
         global settings
         settings = read_into_dict(settings_filename)
+
         # Set player names according to the selected opponent
         self.ids.player1_name.text = act_settings[constants.USERNAME]
-        # Init round
-        self.ids.player1_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
-        self.ids.player2_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
         if int(act_settings[constants.OPPONENT]) == 1:
             self.ids.player2_name.text = random.choice(constants.COMPUTER_NAMES)
         else:
             self.ids.player2_name.text = act_settings[constants.USERNAME_2]
+
+        # Init round
+        self.ids.player1_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
+        self.ids.player2_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
 
         # Set the available gestures according to the selected game mode
         global available_gestures
@@ -82,10 +84,11 @@ class GameWindow(Screen):
             available_gestures = constants.GAME_MODE_3_CHOICES
 
         # Initialize webcam and hand detection module (TODO: user should be able to select webcam number)
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(int(settings[constants.SETTINGS_CAMERA_DEVICE_KEY]))
         self.hd = HandDetection(
             min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
             min_tracking_confidence=float(settings[constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY]))
+
         # Schedule camera frame update
         Clock.schedule_interval(self.update, 0.03)
 
@@ -225,6 +228,7 @@ class GameWindow(Screen):
 
     def is_finished(self, dt):
         if winner:
+            # TODO: save result and navigate to main menu or scoreboard
             pass
 
     def predicted_photo_p1(self):
@@ -261,5 +265,4 @@ class GameWindow(Screen):
         winner = None
         can_show_live_image = True
         player_1s_turn = True
-        # TODO: save results, so it can be displayed later in Scoreboard window
         # TODO: unschedule every Clock event

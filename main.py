@@ -47,6 +47,10 @@ def create_settings_file_with_default_values():
                          constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY,
                          constants.SETTINGS_MIN_TRACKING_CONFIDENCE_DEFAULT_VALUE,
                          constants.SETTINGS_HEADER)
+    update_settings_file(settings_file,
+                         constants.SETTINGS_CAMERA_DEVICE_KEY,
+                         constants.SETTINGS_CAMERA_DEVICE_DEFAULT_VALUE,
+                         constants.SETTINGS_HEADER)
 
 
 class RockPaperScissorMainApp(App):

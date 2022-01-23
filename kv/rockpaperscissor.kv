@@ -564,6 +564,9 @@ WindowManager:
                     Label:
                         text: 'Minimum tracking confidence:'
 
+                    Label:
+                        text: 'Camera device:'
+
                 BoxLayout:
                     orientation: 'vertical'
 
@@ -598,6 +601,17 @@ WindowManager:
                         Label:
                             text: str(min_tra_conf.value)
                             size_hint_x: 0.3
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+
+                        CameraSelectionButton:
+                            on_press:
+                                self.on_button_click()
+                            text: 'Find all'
+
+                        Label:
+                            id: cam_devices_label
 
             Label:
 
