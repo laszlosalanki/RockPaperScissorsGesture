@@ -228,6 +228,7 @@ WindowManager:
         padding: 20
 
         Label:
+            size_hint_x: 0.1
 
         BoxLayout:
             orientation: 'vertical'
@@ -263,13 +264,13 @@ WindowManager:
                     spacing: 10
                     padding: 20
 
-                    TextInput:
+                    TextInputP1:
                         id: player1_username
                         size_hint_y: None
                         height: 50
                         multiline: False
 
-                    TextInput:
+                    TextInputP2:
                         id: player2_username
                         multiline: False
                         size_hint_y: None
@@ -304,6 +305,7 @@ WindowManager:
                     size: 160, 50
 
         Label:
+            size_hint_x: 0.1
 
 <RoundSelectionViewWindow>:
     name: 'round'
@@ -320,6 +322,7 @@ WindowManager:
         padding: 20
 
         Label:
+            size_hint_x: 0.1
 
         BoxLayout:
             orientation: 'vertical'
@@ -381,6 +384,7 @@ WindowManager:
                 pos_hint: {'center_x': 0.5}
 
         Label:
+            size_hint_x: 0.1
 
 <GameWindow>:
     name: 'game'
@@ -554,6 +558,7 @@ WindowManager:
         padding: 20
 
         Label:
+            size_hint_x: 0.2
 
         BoxLayout:
             orientation: 'vertical'
@@ -637,6 +642,7 @@ WindowManager:
                 pos_hint: {'center_x': 0.5}
 
         Label:
+            size_hint_x: 0.2
 
 <ScoreboardWindow>:
     name: 'scoreboard'

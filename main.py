@@ -1,9 +1,6 @@
-from cv2 import cv2
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivy import Config
-from win32api import GetSystemMetrics
 
 from data import constants
 from screens.MainMenuWindow import MainMenuWindow
@@ -24,9 +21,7 @@ from settings_file_helper import create_settings_file, update_settings_file
 
 kv = Builder.load_file(constants.KV_FILE)
 
-screensize = GetSystemMetrics(0), GetSystemMetrics(1)
-Window.size = screensize
-Window.fullscreen = True
+Window.fullscreen = 'auto'
 
 
 act_settings_file = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME

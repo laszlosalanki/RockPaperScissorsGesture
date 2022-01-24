@@ -1,9 +1,29 @@
 from kivy.clock import Clock
+from kivy.properties import NumericProperty
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
+from kivy.uix.textinput import TextInput
 
 from data import constants
 from settings_file_helper import update_settings_file
+
+
+class TextInputP1(TextInput):
+    max_characters = NumericProperty(11)
+
+    def insert_text(self, substring, from_undo=False):
+        if len(self.text) > self.max_characters:
+            substring = ""
+        TextInput.insert_text(self, substring, from_undo)
+
+
+class TextInputP2(TextInput):
+    max_characters = NumericProperty(11)
+
+    def insert_text(self, substring, from_undo=False):
+        if len(self.text) > self.max_characters:
+            substring = ""
+        TextInput.insert_text(self, substring, from_undo)
 
 
 class NextButton(Button):
