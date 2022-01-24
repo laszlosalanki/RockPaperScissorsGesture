@@ -165,9 +165,9 @@ class GameWindow(Screen):
                 self.ids.player1_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 self.ids.player2_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 # Player 1
-                self.ids.player1_info.text = 'Your turn'
+                self.ids.player1_info.text = constants.YOUR_TURN
                 await ak.sleep(3)
-                self.ids.player1_info.text = 'Stay still!'
+                self.ids.player1_info.text = constants.STAY_STILL
                 await ak.sleep(2)
                 detected_gesture_list.clear()
 
@@ -196,7 +196,7 @@ class GameWindow(Screen):
                 self.ids.gesture_text_p1.text = self.p1_choice
 
                 # Player 2
-                self.ids.player2_info.text = 'Your turn'
+                self.ids.player2_info.text = constants.YOUR_TURN
                 await ak.sleep(3)
                 player_1s_turn = True
                 computer_choice = random.choice(available_gestures)
@@ -207,18 +207,18 @@ class GameWindow(Screen):
                 self.ids.player2_info.text = ''
                 if self.p1_choice != constants.LOG_CANNOT_RECOGNISE_GESTURE and self.p1_choice != constants.LOG_NO_HAND:
                     if self.p1_choice == self.p2_choice:
-                        self.ids.who_won_round.text = '='
+                        self.ids.who_won_round.text = constants.DRAW
                         self.rounds_actually += 1
                     elif self.p1_choice in constants.WEAKNESSES[self.p2_choice]:
                         p1_score += 1
                         self.rounds += 1
                         self.rounds_actually += 1
-                        self.ids.who_won_round.text = '>'
+                        self.ids.who_won_round.text = constants.P1_WON
                     elif self.p2_choice in constants.WEAKNESSES[self.p1_choice]:
                         p2_score += 1
                         self.rounds += 1
                         self.rounds_actually += 1
-                        self.ids.who_won_round.text = '<'
+                        self.ids.who_won_round.text = constants.P2_WON
                 self.ids.p1_score.text = str(p1_score)
                 self.ids.p2_score.text = str(p2_score)
                 detected_gesture_list.clear()
@@ -252,10 +252,10 @@ class GameWindow(Screen):
                 self.ids.player1_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 self.ids.player2_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 # Player 1
-                self.ids.player1_info.text = 'Your turn'
-                self.ids.player2_info.text = 'Look away!'
+                self.ids.player1_info.text = constants.YOUR_TURN
+                self.ids.player2_info.text = constants.LOOK_AWAY
                 await ak.sleep(5)
-                self.ids.player1_info.text = 'Stay still!'
+                self.ids.player1_info.text = constants.STAY_STILL
                 await ak.sleep(2)
                 detected_gesture_list.clear()
 
@@ -292,10 +292,10 @@ class GameWindow(Screen):
                 can_show_live_image_p2 = True
 
                 # Player 2
-                self.ids.player1_info.text = 'Look away!'
-                self.ids.player2_info.text = 'Your turn'
+                self.ids.player1_info.text = constants.LOOK_AWAY
+                self.ids.player2_info.text = constants.YOUR_TURN
                 await ak.sleep(5)
-                self.ids.player2_info.text = 'Stay still!'
+                self.ids.player2_info.text = constants.STAY_STILL
                 await ak.sleep(2)
                 detected_gesture_list.clear()
 
@@ -329,18 +329,18 @@ class GameWindow(Screen):
                         self.p2_choice != constants.LOG_CANNOT_RECOGNISE_GESTURE and \
                         self.p2_choice != constants.LOG_NO_HAND:
                     if self.p1_choice == self.p2_choice:
-                        self.ids.who_won_round.text = '='
+                        self.ids.who_won_round.text = constants.DRAW
                         self.rounds_actually += 1
                     elif self.p1_choice in constants.WEAKNESSES[self.p2_choice]:
                         p1_score += 1
                         self.rounds += 1
                         self.rounds_actually += 1
-                        self.ids.who_won_round.text = '>'
+                        self.ids.who_won_round.text = constants.P1_WON
                     elif self.p2_choice in constants.WEAKNESSES[self.p1_choice]:
                         p2_score += 1
                         self.rounds += 1
                         self.rounds_actually += 1
-                        self.ids.who_won_round.text = '<'
+                        self.ids.who_won_round.text = constants.P2_WON
                 self.ids.p1_score.text = str(p1_score)
                 self.ids.p2_score.text = str(p2_score)
                 detected_gesture_list.clear()
@@ -382,8 +382,8 @@ class GameWindow(Screen):
         elif self.init_countdown_cnt == 0:
             self.ids.countdown_p1.text = ''
             self.ids.countdown_p2.text = ''
-            self.ids.player1_info.text = 'Get ready!'
-            self.ids.player2_info.text = 'Get ready!'
+            self.ids.player1_info.text = constants.GET_READY
+            self.ids.player2_info.text = constants.GET_READY
 
     def computer_task_helper(self, dt):
         self.computer_game_task = ak.start(self.computer_game())

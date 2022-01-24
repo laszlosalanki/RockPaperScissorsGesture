@@ -60,7 +60,7 @@ class CameraSelectionButton(Button):
             btn.bind(on_press=self.save_cam_choice)
             box_layout.add_widget(btn)
         self.popupWindow = Popup()
-        self.popupWindow.title = 'Select your camera device:'
+        self.popupWindow.title = constants.SETTINGS_SELECT_CAMERA_DEVICE
         self.popupWindow.size_hint = (None, None)
         self.popupWindow.size = (400, 100)
         self.popupWindow.content = box_layout
@@ -74,7 +74,8 @@ class SettingsWindow(Screen):
         Clock.schedule_once(self.read_settings_file, 1)
 
     def keep_up_to_date(self, dt):
-        self.ids.cam_device_label.text = 'Selected: ' + settings[constants.SETTINGS_CAMERA_DEVICE_KEY]
+        self.ids.cam_device_label.text = constants.SETTINGS_SELECTED_CAMERA + \
+                                         settings[constants.SETTINGS_CAMERA_DEVICE_KEY]
 
     def read_settings_file(self, dt):
         global settings

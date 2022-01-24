@@ -22,7 +22,7 @@ from os import remove
 from os.path import exists
 from settings_file_helper import create_settings_file, update_settings_file
 
-kv = Builder.load_file('kv/rockpaperscissor.kv')
+kv = Builder.load_file(constants.KV_FILE)
 
 screensize = GetSystemMetrics(0), GetSystemMetrics(1)
 Window.size = screensize

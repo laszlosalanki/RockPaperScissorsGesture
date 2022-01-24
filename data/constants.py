@@ -1,5 +1,6 @@
 # Window
 TITLE = 'Rock Paper Scissor Gesture'
+KV_FILE = 'kv/rockpaperscissor.kv'
 
 # Console
 LOG_TEMPLATE = '[LOG]'
@@ -13,7 +14,15 @@ LOG_PREDICTED_GESTURE = 'Predicted gesture:'
 LOG_CANNOT_RECOGNISE_GESTURE = 'Gesture cannot be recognised.'
 LOG_NO_HAND = 'No hand detected.'
 
-YOUR_TURN = 'Your turn.'
+# Instructions in game
+GET_READY = 'Get ready'
+YOUR_TURN = 'Your turn'
+STAY_STILL = 'Stay still'
+LOOK_AWAY = 'Look away'
+
+P1_WON = '>'
+P2_WON = '<'
+DRAW = '='
 
 # Supported gestures
 # Game mode 1
@@ -79,6 +88,9 @@ SETTINGS_MIN_TRACKING_CONFIDENCE_DEFAULT_VALUE = 0.5
 SETTINGS_CAMERA_DEVICE_KEY = 'CAMERA_DEVICE: '
 SETTINGS_CAMERA_DEVICE_DEFAULT_VALUE = 0
 
+SETTINGS_SELECT_CAMERA_DEVICE = 'Select your camera device:'
+SETTINGS_SELECTED_CAMERA = 'Selected: '
+
 # History
 HISTORY_FILENAME_ENDING = '_game.json'
 HISTORY_RELATIVE_PATH = 'data/history/'
@@ -109,3 +121,4 @@ GESTURE_IMAGES = {
     LOG_CANNOT_RECOGNISE_GESTURE: GESTURE_IMAGES_PATH + 'image-not-found.png',
     LOG_NO_HAND: GESTURE_IMAGES_PATH + 'image-not-found.png'
 }
+
