@@ -21,7 +21,7 @@ from settings_file_helper import create_settings_file, update_settings_file
 
 kv = Builder.load_file(constants.KV_FILE)
 
-Window.fullscreen = 'auto'
+# Window.fullscreen = 'auto'
 settings = dict()
 
 act_settings_file = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
@@ -34,6 +34,10 @@ def create_settings_file_with_default_values():
     update_settings_file(settings_file,
                          constants.SETTINGS_IS_FIRST_START_KEY,
                          constants.SETTINGS_IS_FIRST_START_DEFAULT_VALUE,
+                         constants.SETTINGS_HEADER)
+    update_settings_file(settings_file,
+                         constants.SETTINGS_FULLSCREEN_KEY,
+                         constants.SETTINGS_FULLSCREEN_DEFAULT_VALUE,
                          constants.SETTINGS_HEADER)
     update_settings_file(settings_file,
                          constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY,
@@ -61,6 +65,17 @@ def read_settings():
     #
 
 
+if not exists(settings_file):
+    create_settings_file_with_default_values()
+
+read_settings()
+
+if settings[constants.SETTINGS_FULLSCREEN_KEY] == 'auto':
+    Window.fullscreen = settings[constants.SETTINGS_FULLSCREEN_KEY]
+elif settings[constants.SETTINGS_FULLSCREEN_KEY] == 'False':
+    Window.fullscreen = False
+
+
 class RockPaperScissorMainApp(App):
     def build(self):
         self.title = constants.TITLE
@@ -68,11 +83,6 @@ class RockPaperScissorMainApp(App):
 
     def on_start(self):
         create_settings_file(act_settings_file)
-
-        if not exists(settings_file):
-            create_settings_file_with_default_values()
-
-        read_settings()
 
         if settings[constants.SETTINGS_IS_FIRST_START_KEY] == 'True':
             update_settings_file(settings_file,

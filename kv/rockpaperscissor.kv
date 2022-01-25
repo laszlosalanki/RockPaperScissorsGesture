@@ -72,7 +72,6 @@ WindowManager:
                 pos_hint: {'center_x': 0.5}
 
             Label:
-                text: ''
 
             Label:
                 text: 'Press ESC to exit anytime'
@@ -576,6 +575,9 @@ WindowManager:
                     orientation: 'vertical'
 
                     Label:
+                        text: 'Fullscreen:'
+
+                    Label:
                         text: 'Minimum detection confidence:'
 
                     Label:
@@ -586,6 +588,9 @@ WindowManager:
 
                 BoxLayout:
                     orientation: 'vertical'
+
+                    FullscreenSwitch:
+                        id: fullscreen_switch
 
                     BoxLayout:
                         orientation: 'horizontal'

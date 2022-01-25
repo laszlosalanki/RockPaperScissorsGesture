@@ -1,11 +1,13 @@
 from cv2 import cv2
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from kivy.uix.slider import Slider
 import asynckivy as ak
+from kivy.uix.switch import Switch
 
 from settings_file_helper import update_settings_file
 from data import constants
@@ -13,6 +15,27 @@ from data import constants
 filename_with_path = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
 
 settings = dict()
+
+
+class FullscreenSwitch(Switch):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        Clock.schedule_once(self.bind_active, 2)
+
+    def bind_active(self, dt):
+        self.bind(active=self.on_active_change)
+
+    def on_active_change(self, instance, value):
+        if value is True:
+            to_save = 'auto'
+        else:
+            to_save = value
+        update_settings_file(filename_with_path,
+                             constants.SETTINGS_FULLSCREEN_KEY,
+                             to_save,
+                             constants.SETTINGS_HEADER)
+        Window.fullscreen = to_save
 
 
 class MinDetectionConfidenceSwitch(Slider):
@@ -71,7 +94,7 @@ class SettingsWindow(Screen):
 
     def __init__(self, **kw):
         super().__init__(**kw)
-        Clock.schedule_once(self.read_settings_file, 1)
+        Clock.schedule_once(self.read_settings_file)
 
     def keep_up_to_date(self, dt):
         self.ids.cam_device_label.text = constants.SETTINGS_SELECTED_CAMERA + \
@@ -88,7 +111,15 @@ class SettingsWindow(Screen):
             #
         #
         for key, value in settings.items():
-            if key == constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY:
+            if key == constants.SETTINGS_FULLSCREEN_KEY:
+                act_val = None
+                if value == 'auto':
+                    act_val = True
+                elif value == 'False':
+                    act_val = False
+                if act_val is not None:
+                    self.ids.fullscreen_switch.active = act_val
+            elif key == constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY:
                 self.ids.min_det_conf.value = float(value)
             elif key == constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY:
                 self.ids.min_tra_conf.value = float(value)
