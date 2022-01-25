@@ -1,14 +1,14 @@
+from json import load
+from os import listdir, remove
+from os.path import isfile, join, abspath
+
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
-from kivy.clock import Clock
-from os import listdir, remove
-from os.path import isfile, join, abspath
-from json import load
 
 from data import constants
-
 
 files = list()
 

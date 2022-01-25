@@ -1,5 +1,6 @@
-from data import constants
 from os import remove
+
+from data import constants
 
 
 def update_settings_file(file_with_path, key, value, header=constants.ACT_GAME_SETTINGS_HEADER):

@@ -1,8 +1,10 @@
+from os import remove
+from os.path import exists
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
 
-from data import constants
 from screens.MainMenuWindow import MainMenuWindow
 from screens.NewGameWindow import NewGameWindow
 from screens.OpponentSelectionViewWindow import OpponentSelectionViewWindow
@@ -13,10 +15,8 @@ from screens.SettingsWindow import SettingsWindow
 from screens.UserNameInputScreen import UserNameInputScreen
 from screens.help.HelpMain import HelpMain
 from screens.WindowManager import WindowManager
-from kivy.properties import ObjectProperty
-from kivy.uix.widget import Widget
-from os import remove
-from os.path import exists
+
+from data import constants
 from settings_file_helper import create_settings_file, update_settings_file
 
 kv = Builder.load_file(constants.KV_FILE)

@@ -1,5 +1,5 @@
-from cv2 import cv2
 import mediapipe as mp
+from cv2 import cv2
 
 from data import constants
 

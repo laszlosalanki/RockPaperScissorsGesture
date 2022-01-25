@@ -1,17 +1,18 @@
-import random
 import operator
+import random
+from datetime import datetime
 from json import dumps
 
+import asynckivy as ak
+from cv2 import cv2
 from kivy.app import App
-from kivy.uix.image import Image
-from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
+from kivy.uix.image import Image
+from kivy.uix.screenmanager import Screen
+
 from data import constants
 from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture
-from cv2 import cv2
-import asynckivy as ak
-from datetime import datetime
 from settings_file_helper import read_into_dict
 
 detected_gesture = None

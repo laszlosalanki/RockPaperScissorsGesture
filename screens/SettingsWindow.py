@@ -1,3 +1,4 @@
+import asynckivy as ak
 from cv2 import cv2
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -6,11 +7,10 @@ from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from kivy.uix.slider import Slider
-import asynckivy as ak
 from kivy.uix.switch import Switch
 
-from settings_file_helper import update_settings_file
 from data import constants
+from settings_file_helper import update_settings_file
 
 filename_with_path = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
 
