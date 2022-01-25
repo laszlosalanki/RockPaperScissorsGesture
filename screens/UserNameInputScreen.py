@@ -41,7 +41,7 @@ class NextButton(Button):
         update_settings_file(file_name_with_path, constants.USERNAME_2, username_2)
 
 
-class UserNameInputScreen(Screen):
+class UsernameInputScreen(Screen):
     def on_pre_enter(self, *args):
         Clock.schedule_once(self.reset_fields)
 

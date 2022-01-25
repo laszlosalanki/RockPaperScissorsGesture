@@ -70,7 +70,7 @@ def is_wizard(positions):
            (15 <= pin_tip_range <= 35)
 
 
-def is_scissor(positions):
+def is_scissors(positions):
     return (positions[8][2] < positions[6][2]) and \
            (positions[12][2] < positions[10][2]) and \
            not is_paper(positions)
@@ -128,8 +128,8 @@ def recognise_hand_gesture(positions):
         return constants.BATMAN
     elif is_glock(positions):
         return constants.GLOCK
-    elif is_scissor(positions):
-        return constants.SCISSOR
+    elif is_scissors(positions):
+        return constants.SCISSORS
     elif is_spock(positions):
         return constants.SPOCK
     elif is_paper(positions):

@@ -1,6 +1,6 @@
 # Window
-TITLE = 'Rock Paper Scissor Gesture'
-KV_FILE = 'kv/rockpaperscissor.kv'
+TITLE = 'Rock Paper Scissors Gesture'
+KV_FILE = 'kv/rockpaperscissors.kv'
 
 # Console
 LOG_TEMPLATE = '[LOG]'
@@ -28,7 +28,7 @@ DRAW = '='
 # Game mode 1
 ROCK = 'rock'
 PAPER = 'paper'
-SCISSOR = 'scissor'
+SCISSORS = 'scissors'
 # Game mode 2
 LIZARD = 'lizard'
 SPOCK = 'spock'
@@ -38,21 +38,21 @@ BATMAN = 'batman'
 SPIDERMAN = 'spiderman'
 GLOCK = 'glock'
 
-GAME_MODE_1_CHOICES = [ROCK, PAPER, SCISSOR]
+GAME_MODE_1_CHOICES = [ROCK, PAPER, SCISSORS]
 GAME_MODE_2_CHOICES = GAME_MODE_1_CHOICES + [LIZARD, SPOCK]
 GAME_MODE_3_CHOICES = GAME_MODE_2_CHOICES + [WIZARD, BATMAN, SPIDERMAN, GLOCK]
-ALL_CHOICES = [ROCK, PAPER, SCISSOR, LIZARD, SPOCK, WIZARD, BATMAN, SPIDERMAN, GLOCK]
+ALL_CHOICES = [ROCK, PAPER, SCISSORS, LIZARD, SPOCK, WIZARD, BATMAN, SPIDERMAN, GLOCK]
 
 # Weaknesses
 WEAKNESSES = {
     ROCK: {PAPER, SPOCK, GLOCK, BATMAN},
-    PAPER: {SCISSOR, WIZARD, LIZARD, SPIDERMAN},
-    SCISSOR: {ROCK, SPOCK, GLOCK, BATMAN},
-    LIZARD: {ROCK, SCISSOR, SPIDERMAN, WIZARD},
+    PAPER: {SCISSORS, WIZARD, LIZARD, SPIDERMAN},
+    SCISSORS: {ROCK, SPOCK, GLOCK, BATMAN},
+    LIZARD: {ROCK, SCISSORS, SPIDERMAN, WIZARD},
     SPOCK: {PAPER, LIZARD, GLOCK, BATMAN},
-    WIZARD: {SCISSOR, ROCK, SPOCK, SPIDERMAN},
+    WIZARD: {SCISSORS, ROCK, SPOCK, SPIDERMAN},
     BATMAN: {PAPER, WIZARD, LIZARD, GLOCK},
-    SPIDERMAN: {ROCK, SCISSOR, BATMAN, SPOCK},
+    SPIDERMAN: {ROCK, SCISSORS, BATMAN, SPOCK},
     GLOCK: {PAPER, SPIDERMAN, LIZARD, WIZARD}
 }
 
@@ -94,7 +94,7 @@ SETTINGS_MIN_TRACKING_CONFIDENCE_DEFAULT_VALUE = 0.5
 SETTINGS_CAMERA_DEVICE_KEY = 'CAMERA_DEVICE: '
 SETTINGS_CAMERA_DEVICE_DEFAULT_VALUE = 0
 
-SETTINGS_SELECT_CAMERA_DEVICE = 'Select your camera device:'
+SETTINGS_SELECT_CAMERA_DEVICE = 'Select your desired camera device:'
 SETTINGS_SELECTED_CAMERA = 'Selected: '
 
 # History
@@ -115,15 +115,15 @@ HISTORY_TIME = 'TIME'
 # Gesture images
 GESTURE_IMAGES_PATH = 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/'
 GESTURE_IMAGES = {
-    'rock': GESTURE_IMAGES_PATH + 'rock.png',
-    'paper': GESTURE_IMAGES_PATH + 'paper.png',
-    'scissor': GESTURE_IMAGES_PATH + 'scissor.png',
-    'glock': GESTURE_IMAGES_PATH + 'glock.png',
-    'spock': GESTURE_IMAGES_PATH + 'spock.png',
-    'wizard': GESTURE_IMAGES_PATH + 'wizard.png',
-    'lizard': GESTURE_IMAGES_PATH + 'lizard.png',
-    'spiderman': GESTURE_IMAGES_PATH + 'spiderman.png',
-    'batman': GESTURE_IMAGES_PATH + 'batman.png',
+    ROCK: GESTURE_IMAGES_PATH + 'rock.png',
+    PAPER: GESTURE_IMAGES_PATH + 'paper.png',
+    SCISSORS: GESTURE_IMAGES_PATH + 'scissors.png',
+    GLOCK: GESTURE_IMAGES_PATH + 'glock.png',
+    SPOCK: GESTURE_IMAGES_PATH + 'spock.png',
+    WIZARD: GESTURE_IMAGES_PATH + 'wizard.png',
+    LIZARD: GESTURE_IMAGES_PATH + 'lizard.png',
+    SPIDERMAN: GESTURE_IMAGES_PATH + 'spiderman.png',
+    BATMAN: GESTURE_IMAGES_PATH + 'batman.png',
     LOG_CANNOT_RECOGNISE_GESTURE: GESTURE_IMAGES_PATH + 'image-not-found.png',
     LOG_NO_HAND: GESTURE_IMAGES_PATH + 'image-not-found.png'
 }

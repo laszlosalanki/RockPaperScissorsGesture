@@ -12,7 +12,7 @@ from screens.RoundSelectionViewWindow import RoundSelectionViewWindow
 from screens.GameWindow import GameWindow
 from screens.ScoreboardWindow import ScoreboardWindow
 from screens.SettingsWindow import SettingsWindow
-from screens.UserNameInputScreen import UserNameInputScreen
+from screens.UserNameInputScreen import UsernameInputScreen
 from screens.help.HelpMain import HelpMain
 from screens.WindowManager import WindowManager
 
@@ -21,7 +21,6 @@ from settings_file_helper import create_settings_file, update_settings_file
 
 kv = Builder.load_file(constants.KV_FILE)
 
-# Window.fullscreen = 'auto'
 settings = dict()
 
 act_settings_file = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
@@ -76,7 +75,7 @@ elif settings[constants.SETTINGS_FULLSCREEN_KEY] == 'False':
     Window.fullscreen = False
 
 
-class RockPaperScissorMainApp(App):
+class RockPaperScissorsMainApp(App):
     def build(self):
         self.title = constants.TITLE
         return kv
@@ -96,4 +95,4 @@ class RockPaperScissorMainApp(App):
 
 
 if __name__ == '__main__':
-    RockPaperScissorMainApp().run()
+    RockPaperScissorsMainApp().run()

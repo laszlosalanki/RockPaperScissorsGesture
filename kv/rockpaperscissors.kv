@@ -2,7 +2,7 @@ WindowManager:
     MainMenuWindow:
     NewGameWindow:
     OpponentSelectionViewWindow:
-    UserNameInputScreen:
+    UsernameInputScreen:
     RoundSelectionViewWindow:
     GameWindow:
     SettingsWindow:
@@ -30,7 +30,7 @@ WindowManager:
             spacing: 10
 
             Label:
-                text: 'Rock Paper Scissor Gesture'
+                text: 'Rock Paper Scissors Gesture'
                 font_size: 60
 
             Label:
@@ -105,7 +105,7 @@ WindowManager:
             Label:
 
             GameMode1:
-                text: 'Rock Paper Scissor'
+                text: 'Rock Paper Scissors'
                 on_press:
                     app.root.transition.direction = 'left'
                     self.set_game_mode(1)
@@ -116,7 +116,7 @@ WindowManager:
                 pos_hint: {'center_x': 0.5}
 
             GameMode2:
-                text: 'Rock Paper Scissor Lizard Spock'
+                text: 'Rock Paper Scissors Lizard Spock'
                 on_press:
                     app.root.transition.direction = 'left'
                     self.set_game_mode(2)
@@ -127,7 +127,7 @@ WindowManager:
                 pos_hint: {'center_x': 0.5}
 
             GameMode3:
-                text: 'Rock Paper Scissor Lizard Spock Wizard Batman Spiderman Glock'
+                text: 'Rock Paper Scissors Lizard Spock Wizard Batman Spiderman Glock'
                 on_press:
                     app.root.transition.direction = 'left'
                     self.set_game_mode(3)
@@ -212,7 +212,7 @@ WindowManager:
 
         Label:
 
-<UserNameInputScreen>:
+<UsernameInputScreen>:
     name: 'username'
 
     canvas.before:
@@ -268,17 +268,19 @@ WindowManager:
                         size_hint_y: None
                         height: 50
                         multiline: False
+                        hint_text: '12 chars max'
 
                     TextInputP2:
                         id: player2_username
                         multiline: False
                         size_hint_y: None
                         height: 50
+                        hint_text: '12 chars max'
 
             Label:
 
             Label:
-                text: 'If you\'re against the computer, you should not fill the second input field.\n Also, you can leave both empty, in that case the default names will be applied.'
+                text: 'If you\'re against the computer, you should not fill the second input field.\n Also, you can leave both empty, in that case the default names will be used.'
 
             BoxLayout:
                 orientation: 'horizontal'
@@ -481,6 +483,7 @@ WindowManager:
 
                 Label:
                     id: gesture_text_p1
+                    font_size: 24
 
                 Button:
                     id: game_main_button
@@ -494,6 +497,7 @@ WindowManager:
 
                 Label:
                     id: gesture_text_p2
+                    font_size: 24
 
         BoxLayout:
             orientation: 'vertical'
@@ -673,7 +677,7 @@ WindowManager:
             size_hint_y: 0.1
 
             Label:
-                text: 'Time'
+                text: 'Date & Time'
                 font_size: 16
 
             Label:

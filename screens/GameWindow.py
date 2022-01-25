@@ -342,6 +342,8 @@ class GameWindow(Screen):
                         self.rounds += 1
                         self.rounds_actually += 1
                         self.ids.who_won_round.text = constants.P2_WON
+                else:
+                    self.rounds_actually += 1
                 self.ids.p1_score.text = str(p1_score)
                 self.ids.p2_score.text = str(p2_score)
                 detected_gesture_list.clear()
