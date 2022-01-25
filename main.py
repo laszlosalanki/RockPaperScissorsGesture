@@ -22,7 +22,7 @@ from settings_file_helper import create_settings_file, update_settings_file
 kv = Builder.load_file(constants.KV_FILE)
 
 Window.fullscreen = 'auto'
-
+settings = dict()
 
 act_settings_file = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
 settings_file = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
@@ -30,6 +30,10 @@ settings_file = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_
 
 def create_settings_file_with_default_values():
     create_settings_file(settings_file,
+                         constants.SETTINGS_HEADER)
+    update_settings_file(settings_file,
+                         constants.SETTINGS_IS_FIRST_START_KEY,
+                         constants.SETTINGS_IS_FIRST_START_DEFAULT_VALUE,
                          constants.SETTINGS_HEADER)
     update_settings_file(settings_file,
                          constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY,
@@ -45,6 +49,18 @@ def create_settings_file_with_default_values():
                          constants.SETTINGS_HEADER)
 
 
+def read_settings():
+    global settings
+    with open(settings_file, 'r') as saved_settings_file:
+        settings_lines = saved_settings_file.readlines()[1:]
+        for line in settings_lines:
+            line_parts = line.split(' ')
+            line_parts[0] = line_parts[0] + ' '
+            settings[line_parts[0]] = line_parts[1].strip()
+        #
+    #
+
+
 class RockPaperScissorMainApp(App):
     def build(self):
         self.title = constants.TITLE
@@ -55,6 +71,15 @@ class RockPaperScissorMainApp(App):
 
         if not exists(settings_file):
             create_settings_file_with_default_values()
+
+        read_settings()
+
+        if settings[constants.SETTINGS_IS_FIRST_START_KEY] == 'True':
+            update_settings_file(settings_file,
+                                 constants.SETTINGS_IS_FIRST_START_KEY,
+                                 False,
+                                 constants.SETTINGS_HEADER)
+            App.get_running_app().root.current = 'help'
 
     def on_stop(self):
         remove(constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME)
