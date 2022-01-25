@@ -1,4 +1,4 @@
-# Rock Paper and Scissors Gesture
+# Rock Paper Scissors Gesture
 
 ## Description
 
