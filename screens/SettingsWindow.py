@@ -29,13 +29,16 @@ class FullscreenSwitch(Switch):
     def on_active_change(self, instance, value):
         if value is True:
             to_save = 'auto'
+            Window.fullscreen = 'auto'
         else:
             to_save = value
+            Window.fullscreen = value
+            Window.size = (1360, 768)
+            Window.minimum_width, Window.minimum_height = Window.size
         update_settings_file(filename_with_path,
                              constants.SETTINGS_FULLSCREEN_KEY,
                              to_save,
                              constants.SETTINGS_HEADER)
-        Window.fullscreen = to_save
 
 
 class MinDetectionConfidenceSwitch(Slider):

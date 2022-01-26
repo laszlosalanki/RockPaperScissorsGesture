@@ -73,6 +73,8 @@ if settings[constants.SETTINGS_FULLSCREEN_KEY] == 'auto':
     Window.fullscreen = settings[constants.SETTINGS_FULLSCREEN_KEY]
 elif settings[constants.SETTINGS_FULLSCREEN_KEY] == 'False':
     Window.fullscreen = False
+    Window.size = (1360, 768)
+    Window.minimum_width, Window.minimum_height = Window.size
 
 
 class RockPaperScissorsMainApp(App):

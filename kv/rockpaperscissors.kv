@@ -753,30 +753,252 @@ WindowManager:
     BoxLayout:
         orientation: 'horizontal'
         spacing: 10
-        padding: 20
+        padding: 10
 
-        Label:
+        ScrollView:
+            size_hint_x: 0.5
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    text: 'Computer gameplay'
+                    font_size: 28
+                    size_hint_y: None
+
+                Label:
+                    text: 'The game starts with a 5s countdown.\nAfter that, your instruction field on\nthe left will indicate your turn.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'Soon, the hand detection module\'ll\nstart looking for a hand on the camera\nfeed, so get ready to show\nthe desired gesture.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'When the instruction filed says,\n\'Stay still\',\ndon\'t move your hand\nfor 5 seconds.That should to\nbe enough to detect it.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'The detected gesture will be displayed\non the bottom side of the\nscreen in realtime.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'After that, the computer\'ll choose\na gesture as well. Between your\ngestures, a relational sign will show,\nwho won the given round.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'The minimum number of rounds\nis what you selected before. In the end,\nthis number can differ from the\nnumber of actually played rounds.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'It can happen, when:\n- the computer selects the same gesture,\n- your gesture cannot be recognised\n- and when there\'s no hand on the\ncamera feed at all.'
+                    font_size: 16
+                    size_hint_y: None
 
         BoxLayout:
             orientation: 'vertical'
+            spacing: 10
+            padding_y: 20
 
             Label:
                 text: 'Help'
                 font_size: 60
+                size_hint_y: 0.3
 
-            Label:
+                canvas.before:
+                    Color:
+                        rgba: 1, 0, 1, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
-            Label:
+            ScrollView:
 
-            Label:
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: 20
+                    spacing: 10
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/rock.png'
+
+                        Label:
+                            text: 'Rock'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/paper.png'
+
+                        Label:
+                            text: 'Paper'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/scissors.png'
+
+                        Label:
+                            text: 'Scissors'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/lizard.png'
+
+                        Label:
+                            text: 'Lizard'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/spock.png'
+
+                        Label:
+                            text: 'Spock'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/wizard.png'
+
+                        Label:
+                            text: 'Wizard'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/batman.png'
+
+                        Label:
+                            text: 'Batman'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/spiderman.png'
+
+                        Label:
+                            text: 'Spiderman'
+                            font_size: 24
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 20
+
+                        Image:
+                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/glock.png'
+
+                        Label:
+                            text: 'Glock'
+                            font_size: 24
 
             Button:
                 text: 'Back'
                 on_release:
                     app.root.transition.direction = 'right'
                     app.root.current = 'main'
-                size_hint: None, None
+                size_hint: None, 0.1
                 size: 160, 50
                 pos_hint: {'center_x': 0.5}
 
-        Label:
+        ScrollView:
+            size_hint_x: 0.5
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    text: 'Other player gameplay'
+                    font_size: 28
+                    size_hint_y: None
+
+                Label:
+                    text: 'In this gamemode the gameplay\ndoesn\'t differ much.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'The main difference is that\nwhen Player 1 selects a gesture,\nPlayer 2 should \'Look away\'.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'After Player 1\'s gesture saved,\nPlayer 2\'s hand will be detected,\nwhich means Player 1 should\nlook away now.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: 'The key element is that the players\nshould not see each other\' hands.'
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: ''
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: ''
+                    font_size: 16
+                    size_hint_y: None
+
+                Label:
+                    text: ''
+                    font_size: 16
+                    size_hint_y: None
