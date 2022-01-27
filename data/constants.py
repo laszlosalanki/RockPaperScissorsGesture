@@ -11,8 +11,8 @@ LOG_OPPONENT_SELECTED = 'Selected opponent:'
 LOG_DIFFICULTY_SELECTED = 'Selected difficulty:'
 LOG_ROUNDS_SELECTED = 'Selected rounds:'
 LOG_PREDICTED_GESTURE = 'Predicted gesture:'
-LOG_CANNOT_RECOGNISE_GESTURE = 'Gesture cannot be recognised.'
-LOG_NO_HAND = 'No hand detected.'
+LOG_CANNOT_RECOGNISE_GESTURE = 'Gesture cannot be recognised'
+LOG_NO_HAND = 'No hand detected'
 
 # Instructions in game
 GET_READY = 'Get ready'
@@ -127,4 +127,5 @@ GESTURE_IMAGES = {
     LOG_CANNOT_RECOGNISE_GESTURE: GESTURE_IMAGES_PATH + 'image-not-found.png',
     LOG_NO_HAND: GESTURE_IMAGES_PATH + 'image-not-found.png'
 }
-
+GESTURE_HIDDEN_IMAGE = GESTURE_IMAGES_PATH + 'top_secret.png'
+GESTURE_HIDDEN_TEXT = 'Gesture hidden temporary'

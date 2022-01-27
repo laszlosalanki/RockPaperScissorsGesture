@@ -279,8 +279,6 @@ class GameWindow(Screen):
                 else:
                     self.p1_choice = max(gesture_stats.items(), key=operator.itemgetter(1))[0]
 
-                ak.sleep(3)
-
                 can_show_live_image_p1 = False
 
                 self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[self.p1_choice]
@@ -288,7 +286,12 @@ class GameWindow(Screen):
 
                 player_1s_turn = False
 
-                ak.sleep(8)
+                await ak.sleep(3)
+
+                self.ids.gesture_image_p1.source = constants.GESTURE_HIDDEN_IMAGE
+                self.ids.gesture_text_p1.text = constants.GESTURE_HIDDEN_TEXT
+
+                await ak.sleep(5)
 
                 can_show_live_image_p2 = True
 
@@ -323,7 +326,22 @@ class GameWindow(Screen):
 
                 self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[self.p2_choice]
                 self.ids.gesture_text_p2.text = self.p2_choice
-                ak.sleep(5)
+                await ak.sleep(5)
+
+                self.ids.player1_info.text = ''
+
+                self.ids.gesture_image_p2.source = constants.GESTURE_HIDDEN_IMAGE
+                self.ids.gesture_text_p2.text = constants.GESTURE_HIDDEN_TEXT
+
+                await ak.sleep(5)
+
+                self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[self.p1_choice]
+                self.ids.gesture_text_p1.text = self.p1_choice
+
+                self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[self.p2_choice]
+                self.ids.gesture_text_p2.text = self.p2_choice
+
+                await ak.sleep(3)
 
                 if self.p1_choice != constants.LOG_CANNOT_RECOGNISE_GESTURE and \
                         self.p1_choice != constants.LOG_NO_HAND and \
@@ -359,7 +377,7 @@ class GameWindow(Screen):
                 self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[self.p2_choice]
                 self.ids.gesture_text_p2.text = self.p2_choice
 
-                ak.sleep(3)
+                await ak.sleep(3)
 
                 player_1s_turn = True
                 can_show_live_image_p1 = True
