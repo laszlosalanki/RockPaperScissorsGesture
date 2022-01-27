@@ -13,7 +13,7 @@ from screens.GameWindow import GameWindow
 from screens.ScoreboardWindow import ScoreboardWindow
 from screens.SettingsWindow import SettingsWindow
 from screens.UserNameInputScreen import UsernameInputScreen
-from screens.help.HelpMain import HelpMain
+from screens.HelpWindow import HelpWindow
 from screens.WindowManager import WindowManager
 
 from data import constants

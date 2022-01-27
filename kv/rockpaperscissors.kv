@@ -7,7 +7,7 @@ WindowManager:
     GameWindow:
     SettingsWindow:
     ScoreboardWindow:
-    HelpMain:
+    HelpWindow:
 
 <MainMenuWindow>:
     name: 'main'
@@ -741,7 +741,7 @@ WindowManager:
 
             Label:
 
-<HelpMain>:
+<HelpWindow>:
     name: 'help'
 
     canvas.before:
@@ -816,128 +816,12 @@ WindowManager:
             ScrollView:
 
                 BoxLayout:
+                    id: gesture_help_item_holder
                     orientation: 'vertical'
                     size_hint_y: None
                     height: self.minimum_height
                     padding: 20
                     spacing: 10
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/rock.png'
-
-                        Label:
-                            text: 'Rock'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/paper.png'
-
-                        Label:
-                            text: 'Paper'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/scissors.png'
-
-                        Label:
-                            text: 'Scissors'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/lizard.png'
-
-                        Label:
-                            text: 'Lizard'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/spock.png'
-
-                        Label:
-                            text: 'Spock'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/wizard.png'
-
-                        Label:
-                            text: 'Wizard'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/batman.png'
-
-                        Label:
-                            text: 'Batman'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/spiderman.png'
-
-                        Label:
-                            text: 'Spiderman'
-                            font_size: 24
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        spacing: 10
-                        padding: 20
-
-                        Image:
-                            source: 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/glock.png'
-
-                        Label:
-                            text: 'Glock'
-                            font_size: 24
 
             Button:
                 text: 'Back'
