@@ -76,8 +76,8 @@ class GameWindow(Screen):
         self.ids.player1_info.text = ''
         self.ids.player2_info.text = ''
         # Init score
-        self.ids.p1_score.text = '0'
-        self.ids.p2_score.text = '0'
+        self.ids.p1_score.text = str(p1_score)
+        self.ids.p2_score.text = str(p2_score)
         # Counter for initial countdown
         self.init_countdown_cnt = 5
         # Bind the cancel button
@@ -87,11 +87,9 @@ class GameWindow(Screen):
         # Run init again (in case of the game was cancelled before)
         Clock.schedule_once(self.init)
         # Read ACT_SETTINGS file
-        global act_settings
+        global act_settings, settings, game_data, available_gestures
         act_settings = read_into_dict(act_settings_filename)
-        global settings
         settings = read_into_dict(settings_filename)
-        global game_data
         # Set player names according to the selected opponent
         self.ids.player1_name.text = act_settings[constants.USERNAME]
         game_data[constants.HISTORY_PLAYER_1] = act_settings[constants.USERNAME]
@@ -107,7 +105,6 @@ class GameWindow(Screen):
         self.ids.player2_round.text = '0 / ' + str(act_settings[constants.ROUNDS])
         game_data[constants.HISTORY_SELECTED_ROUNDS] = int(act_settings[constants.ROUNDS])
         # Set the available gestures according to the selected game mode
-        global available_gestures
         if int(act_settings[constants.GAME_MODE]) == 1:
             available_gestures = constants.GAME_MODE_1_CHOICES
         elif int(act_settings[constants.GAME_MODE]) == 2:
@@ -148,12 +145,19 @@ class GameWindow(Screen):
                     else:
                         detected_gesture_p1 = constants.LOG_CANNOT_RECOGNISE_GESTURE
                     detected_gesture_list_p1.append(detected_gesture_p1)
+
                 else:
                     detected_gesture_p1 = constants.LOG_NO_HAND
+                # Only show live image, when should
+                if can_show_live_image_p1:
+                    self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture_p1]
+                    self.ids.gesture_text_p1.text = detected_gesture_p1
             else:
                 if landmarks:
                     data_dict = which_players_hand(landmarks, processed_image.shape[1], processed_image.shape[0])
+                    # If the two hands aren't on the same side
                     if data_dict:
+                        # If both hands could be found
                         if constants.PLAYER1 in data_dict.keys() and constants.PLAYER2 in data_dict.keys():
                             player_1_gesture = recognise_hand_gesture(data_dict[constants.PLAYER1])
                             player_2_gesture = recognise_hand_gesture(data_dict[constants.PLAYER2])
@@ -173,7 +177,7 @@ class GameWindow(Screen):
                                 self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture_p2]
                                 self.ids.gesture_text_p1.text = detected_gesture_p1
                                 self.ids.gesture_text_p2.text = detected_gesture_p2
-
+                        # If only Player 1's hand could be found
                         elif constants.PLAYER1 in data_dict.keys() and constants.PLAYER2 not in data_dict.keys():
                             player_1_gesture = recognise_hand_gesture(data_dict[constants.PLAYER1])
                             detected_gesture_p2 = constants.LOG_NO_HAND
@@ -189,6 +193,7 @@ class GameWindow(Screen):
                                 self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[constants.LOG_NO_HAND]
                                 self.ids.gesture_text_p1.text = detected_gesture_p1
                                 self.ids.gesture_text_p2.text = constants.LOG_NO_HAND
+                        # If only Player 2's hand could be found
                         else:
                             player_2_gesture = recognise_hand_gesture(data_dict[constants.PLAYER2])
                             detected_gesture_p1 = constants.LOG_NO_HAND
@@ -204,7 +209,7 @@ class GameWindow(Screen):
                                 self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture_p2]
                                 self.ids.gesture_text_p1.text = constants.LOG_NO_HAND
                                 self.ids.gesture_text_p2.text = detected_gesture_p2
-
+                    # If both hands are on the same side
                     else:
                         detected_gesture_p1 = constants.LOG_NO_HAND
                         detected_gesture_p2 = constants.LOG_NO_HAND
@@ -212,6 +217,7 @@ class GameWindow(Screen):
                         self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture_p2]
                         self.ids.gesture_text_p1.text = detected_gesture_p1
                         self.ids.gesture_text_p2.text = detected_gesture_p2
+                # If no hands could be found at all
                 else:
                     detected_gesture_p1 = constants.LOG_NO_HAND
                     detected_gesture_p2 = constants.LOG_NO_HAND
@@ -227,11 +233,6 @@ class GameWindow(Screen):
             texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
             self.ids.camera_frame.texture = texture
-
-            if int(act_settings[constants.OPPONENT]) == 1:
-                if player_1s_turn and can_show_live_image_p1:
-                    self.predicted_photo_p1()
-                    self.predicted_text_p1()
 
     async def computer_game(self):
         global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image_p1, \
@@ -483,16 +484,6 @@ class GameWindow(Screen):
     def is_finished(self, dt):
         if winner:
             App.get_running_app().root.current = 'scoreboard'
-
-    def predicted_photo_p1(self):
-        global detected_gesture_p1
-        if detected_gesture_p1:
-            self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture_p1]
-
-    def predicted_text_p1(self):
-        global detected_gesture_p1
-        if detected_gesture_p1:
-            self.ids.gesture_text_p1.text = detected_gesture_p1
 
     def cancel_things(self, instance):
         global should_save_history_file, game_data, game_time_in_secs
