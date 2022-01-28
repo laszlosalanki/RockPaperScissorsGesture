@@ -12,6 +12,8 @@ Source: http://bigbangtheory.lapunk.hu/?modul=oldal&tartalom=1195704
 - Rock Paper Scissors Lizard Spock (Gamemode 2)
 - Rock Paper Scissors Lizard Spock Wizard Batman Spiderman Glock (Gamemode 3)
 
+![Gameplay](docs/images/screen_1.png)
+
 ### Rules:
 - Gamemode 1:
     - Scissors > Paper
