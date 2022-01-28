@@ -106,5 +106,5 @@ python main.py
 - [AsyncKivy](https://github.com/gottadiveintopython/asynckivy)
 
 ## Image sources:
-- Gestures [Imgur](https://imgur.com/gallery/vKzEw12)
-- Images [KindPNG](https://www.kindpng.com/)
+- Gestures: [Imgur](https://imgur.com/gallery/vKzEw12)
+- Images: [KindPNG](https://www.kindpng.com/)
