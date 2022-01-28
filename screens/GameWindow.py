@@ -12,16 +12,22 @@ from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen
 
 from data import constants
-from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture
+from hand_detection import HandDetection, get_coordinates_by_hand, recognise_hand_gesture, which_players_hand
 from settings_file_helper import read_into_dict
 
-detected_gesture = None
-detected_gesture_list = list()
 player_1s_turn = True
+
 available_gestures = list()
+
 can_show_live_image_p1 = True
-can_show_live_image_p2 = False
+
 should_save_history_file = True
+
+can_show_live_image_other_player_mode = True
+detected_gesture_p1 = None
+detected_gesture_list_p1 = list()
+detected_gesture_p2 = None
+detected_gesture_list_p2 = list()
 
 game_data = dict()
 
@@ -111,9 +117,15 @@ class GameWindow(Screen):
         game_data[constants.HISTORY_GAME_MODE] = int(act_settings[constants.GAME_MODE])
         # Initialize webcam and hand detection module
         self.cap = cv2.VideoCapture(int(settings[constants.SETTINGS_CAMERA_DEVICE_KEY]))
-        self.hd = HandDetection(
-            min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
-            min_tracking_confidence=float(settings[constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY]))
+        if int(act_settings[constants.OPPONENT]) == 1:
+            self.hd = HandDetection(
+                min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
+                min_tracking_confidence=float(settings[constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY]))
+        else:
+            self.hd = HandDetection(
+                min_detection_confidence=float(settings[constants.SETTINGS_MIN_DETECTION_CONFIDENCE_KEY]),
+                min_tracking_confidence=float(settings[constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY]),
+                max_num_hands=2)
 
         # Schedule camera frame update
         self.update_schedule = Clock.schedule_interval(self.update, 0.03)
@@ -123,20 +135,91 @@ class GameWindow(Screen):
             success, image = self.cap.read()
             (processed_image, landmarks) = self.hd.find_hand_positions(image)
 
-            global detected_gesture, detected_gesture_list
+            global detected_gesture_p1, detected_gesture_p2, \
+                detected_gesture_list_p1, detected_gesture_list_p2
 
-            if landmarks:
-                data = get_coordinates_by_hand(landmarks, 0, processed_image.shape[1], processed_image.shape[0])
-                gesture = recognise_hand_gesture(data)
-                # Check if the detected gesture is available in the selected game mode
-                if gesture in available_gestures:
-                    detected_gesture = gesture
+            if int(act_settings[constants.OPPONENT]) == 1:
+                if landmarks:
+                    data = get_coordinates_by_hand(landmarks, 0, processed_image.shape[1], processed_image.shape[0])
+                    gesture = recognise_hand_gesture(data)
+                    # Check if the detected gesture is available in the selected game mode
+                    if gesture in available_gestures:
+                        detected_gesture_p1 = gesture
+                    else:
+                        detected_gesture_p1 = constants.LOG_CANNOT_RECOGNISE_GESTURE
+                    detected_gesture_list_p1.append(detected_gesture_p1)
                 else:
-                    detected_gesture = constants.LOG_CANNOT_RECOGNISE_GESTURE
-                detected_gesture_list.append(detected_gesture)
-                # print(constants.LOG_TEMPLATE, constants.LOG_PREDICTED_GESTURE, detected_gesture)
+                    detected_gesture_p1 = constants.LOG_NO_HAND
             else:
-                detected_gesture = constants.LOG_NO_HAND
+                if landmarks:
+                    data_dict = which_players_hand(landmarks, processed_image.shape[1], processed_image.shape[0])
+                    if data_dict:
+                        if constants.PLAYER1 in data_dict.keys() and constants.PLAYER2 in data_dict.keys():
+                            player_1_gesture = recognise_hand_gesture(data_dict[constants.PLAYER1])
+                            player_2_gesture = recognise_hand_gesture(data_dict[constants.PLAYER2])
+                            if player_1_gesture in available_gestures:
+                                detected_gesture_p1 = player_1_gesture
+                            else:
+                                detected_gesture_p1 = constants.LOG_CANNOT_RECOGNISE_GESTURE
+                            if player_2_gesture in available_gestures:
+                                detected_gesture_p2 = player_2_gesture
+                            else:
+                                detected_gesture_p2 = constants.LOG_CANNOT_RECOGNISE_GESTURE
+                            detected_gesture_list_p1.append(detected_gesture_p1)
+                            detected_gesture_list_p2.append(detected_gesture_p2)
+
+                            if can_show_live_image_other_player_mode:
+                                self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture_p1]
+                                self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture_p2]
+                                self.ids.gesture_text_p1.text = detected_gesture_p1
+                                self.ids.gesture_text_p2.text = detected_gesture_p2
+
+                        elif constants.PLAYER1 in data_dict.keys() and constants.PLAYER2 not in data_dict.keys():
+                            player_1_gesture = recognise_hand_gesture(data_dict[constants.PLAYER1])
+                            detected_gesture_p2 = constants.LOG_NO_HAND
+                            if player_1_gesture in available_gestures:
+                                detected_gesture_p1 = player_1_gesture
+                            else:
+                                detected_gesture_p1 = constants.LOG_CANNOT_RECOGNISE_GESTURE
+                            detected_gesture_list_p1.append(detected_gesture_p1)
+                            detected_gesture_list_p2.append(detected_gesture_p2)
+
+                            if can_show_live_image_other_player_mode:
+                                self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture_p1]
+                                self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[constants.LOG_NO_HAND]
+                                self.ids.gesture_text_p1.text = detected_gesture_p1
+                                self.ids.gesture_text_p2.text = constants.LOG_NO_HAND
+                        else:
+                            player_2_gesture = recognise_hand_gesture(data_dict[constants.PLAYER2])
+                            detected_gesture_p1 = constants.LOG_NO_HAND
+                            if player_2_gesture in available_gestures:
+                                detected_gesture_p2 = player_2_gesture
+                            else:
+                                detected_gesture_p2 = constants.LOG_CANNOT_RECOGNISE_GESTURE
+                            detected_gesture_list_p1.append(detected_gesture_p1)
+                            detected_gesture_list_p2.append(detected_gesture_p2)
+
+                            if can_show_live_image_other_player_mode:
+                                self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[constants.LOG_NO_HAND]
+                                self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture_p2]
+                                self.ids.gesture_text_p1.text = constants.LOG_NO_HAND
+                                self.ids.gesture_text_p2.text = detected_gesture_p2
+
+                    else:
+                        detected_gesture_p1 = constants.LOG_NO_HAND
+                        detected_gesture_p2 = constants.LOG_NO_HAND
+                        self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture_p1]
+                        self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture_p2]
+                        self.ids.gesture_text_p1.text = detected_gesture_p1
+                        self.ids.gesture_text_p2.text = detected_gesture_p2
+                else:
+                    detected_gesture_p1 = constants.LOG_NO_HAND
+                    detected_gesture_p2 = constants.LOG_NO_HAND
+                    if can_show_live_image_other_player_mode:
+                        self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture_p1]
+                        self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture_p2]
+                        self.ids.gesture_text_p1.text = detected_gesture_p1
+                        self.ids.gesture_text_p2.text = detected_gesture_p2
 
             buf1 = cv2.flip(processed_image, 0)
             buf = buf1.tostring()
@@ -145,13 +228,10 @@ class GameWindow(Screen):
 
             self.ids.camera_frame.texture = texture
 
-            if player_1s_turn and can_show_live_image_p1:
-                self.predicted_photo_p1()
-                self.predicted_text_p1()
-            elif (not player_1s_turn) and (not can_show_live_image_p1) and can_show_live_image_p2 and \
-                    int(act_settings[constants.OPPONENT]) != 1:
-                self.predicted_photo_p2()
-                self.predicted_text_p2()
+            if int(act_settings[constants.OPPONENT]) == 1:
+                if player_1s_turn and can_show_live_image_p1:
+                    self.predicted_photo_p1()
+                    self.predicted_text_p1()
 
     async def computer_game(self):
         global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image_p1, \
@@ -162,7 +242,7 @@ class GameWindow(Screen):
             self.p1_choice = None
             self.p2_choice = None
             while self.rounds != int(act_settings[constants.ROUNDS]) + 1:
-                detected_gesture_list.clear()
+                detected_gesture_list_p1.clear()
                 self.ids.player1_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 self.ids.player2_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 # Player 1
@@ -170,7 +250,7 @@ class GameWindow(Screen):
                 await ak.sleep(3)
                 self.ids.player1_info.text = constants.STAY_STILL
                 await ak.sleep(2)
-                detected_gesture_list.clear()
+                detected_gesture_list_p1.clear()
 
                 for i in reversed(range(5+1)):
                     self.ids.countdown_p1.text = str(i)
@@ -179,13 +259,13 @@ class GameWindow(Screen):
                 self.ids.player1_info.text = ''
 
                 gesture_stats = dict()
-                for gesture in detected_gesture_list:
+                for gesture in detected_gesture_list_p1:
                     if gesture not in gesture_stats:
                         gesture_stats[gesture] = 1
                     else:
                         gesture_stats[gesture] = gesture_stats[gesture] + 1
                 #
-                detected_gesture_list.clear()
+                detected_gesture_list_p1.clear()
                 if len(gesture_stats.keys()) < 1:
                     self.p1_choice = constants.LOG_NO_HAND
                 else:
@@ -222,7 +302,7 @@ class GameWindow(Screen):
                         self.ids.who_won_round.text = constants.P2_WON
                 self.ids.p1_score.text = str(p1_score)
                 self.ids.p2_score.text = str(p2_score)
-                detected_gesture_list.clear()
+                detected_gesture_list_p1.clear()
                 await ak.sleep(5)
                 self.ids.who_won_round.text = ''
                 can_show_live_image_p1 = True
@@ -241,107 +321,78 @@ class GameWindow(Screen):
             game_data[constants.HISTORY_WINNER] = winner
 
     async def other_player_game(self):
-        global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image_p1, \
-            winner, should_save_history_file, can_show_live_image_p2
+        global p1_score, p2_score, available_gestures, \
+            winner, should_save_history_file, can_show_live_image_other_player_mode
         try:
             self.rounds = 1
             self.rounds_actually = 1
             self.p1_choice = None
             self.p2_choice = None
             while self.rounds != int(act_settings[constants.ROUNDS]) + 1:
-                detected_gesture_list.clear()
+                detected_gesture_list_p1.clear()
+                detected_gesture_list_p2.clear()
                 self.ids.player1_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
                 self.ids.player2_round.text = str(self.rounds_actually) + ' / ' + str(act_settings[constants.ROUNDS])
-                # Player 1
-                self.ids.player1_info.text = constants.YOUR_TURN
-                self.ids.player2_info.text = constants.LOOK_AWAY
+
+                self.ids.player1_info.text = constants.PREPARE
+                self.ids.player2_info.text = constants.PREPARE
+
                 await ak.sleep(5)
+
                 self.ids.player1_info.text = constants.STAY_STILL
+                self.ids.player2_info.text = constants.STAY_STILL
+
                 await ak.sleep(2)
-                detected_gesture_list.clear()
+
+                detected_gesture_list_p1.clear()
+                detected_gesture_list_p2.clear()
 
                 for i in reversed(range(5 + 1)):
                     self.ids.countdown_p1.text = str(i)
+                    self.ids.countdown_p2.text = str(i)
                     await ak.sleep(1)
                 self.ids.countdown_p1.text = ''
+                self.ids.countdown_p2.text = ''
                 self.ids.player1_info.text = ''
+                self.ids.player2_info.text = ''
 
+                # Player 1
                 gesture_stats = dict()
-                for gesture in detected_gesture_list:
+                for gesture in detected_gesture_list_p1:
                     if gesture not in gesture_stats:
                         gesture_stats[gesture] = 1
                     else:
                         gesture_stats[gesture] = gesture_stats[gesture] + 1
                 #
-                detected_gesture_list.clear()
+                detected_gesture_list_p1.clear()
                 if len(gesture_stats.keys()) < 1:
                     self.p1_choice = constants.LOG_NO_HAND
                 else:
                     self.p1_choice = max(gesture_stats.items(), key=operator.itemgetter(1))[0]
 
-                can_show_live_image_p1 = False
-
-                self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[self.p1_choice]
-                self.ids.gesture_text_p1.text = self.p1_choice
-
-                player_1s_turn = False
-
-                await ak.sleep(3)
-
-                self.ids.gesture_image_p1.source = constants.GESTURE_HIDDEN_IMAGE
-                self.ids.gesture_text_p1.text = constants.GESTURE_HIDDEN_TEXT
-
-                await ak.sleep(5)
-
-                can_show_live_image_p2 = True
-
                 # Player 2
-                self.ids.player1_info.text = constants.LOOK_AWAY
-                self.ids.player2_info.text = constants.YOUR_TURN
-                await ak.sleep(5)
-                self.ids.player2_info.text = constants.STAY_STILL
-                await ak.sleep(2)
-                detected_gesture_list.clear()
-
-                for i in reversed(range(5 + 1)):
-                    self.ids.countdown_p2.text = str(i)
-                    await ak.sleep(1)
-                self.ids.countdown_p2.text = ''
-                self.ids.player2_info.text = ''
 
                 gesture_stats = dict()
-                for gesture in detected_gesture_list:
+                for gesture in detected_gesture_list_p2:
                     if gesture not in gesture_stats:
                         gesture_stats[gesture] = 1
                     else:
                         gesture_stats[gesture] = gesture_stats[gesture] + 1
                 #
-                detected_gesture_list.clear()
+                detected_gesture_list_p2.clear()
                 if len(gesture_stats.keys()) < 1:
                     self.p2_choice = constants.LOG_NO_HAND
                 else:
                     self.p2_choice = max(gesture_stats.items(), key=operator.itemgetter(1))[0]
 
-                can_show_live_image_p2 = False
-
-                self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[self.p2_choice]
-                self.ids.gesture_text_p2.text = self.p2_choice
-                await ak.sleep(5)
-
-                self.ids.player1_info.text = ''
-
-                self.ids.gesture_image_p2.source = constants.GESTURE_HIDDEN_IMAGE
-                self.ids.gesture_text_p2.text = constants.GESTURE_HIDDEN_TEXT
-
-                await ak.sleep(5)
+                can_show_live_image_other_player_mode = False
 
                 self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[self.p1_choice]
-                self.ids.gesture_text_p1.text = self.p1_choice
-
                 self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[self.p2_choice]
+                self.ids.gesture_text_p1.text = self.p1_choice
                 self.ids.gesture_text_p2.text = self.p2_choice
 
-                await ak.sleep(3)
+                await ak.sleep(5)
 
                 if self.p1_choice != constants.LOG_CANNOT_RECOGNISE_GESTURE and \
                         self.p1_choice != constants.LOG_NO_HAND and \
@@ -364,8 +415,12 @@ class GameWindow(Screen):
                     self.rounds_actually += 1
                 self.ids.p1_score.text = str(p1_score)
                 self.ids.p2_score.text = str(p2_score)
-                detected_gesture_list.clear()
+
+                detected_gesture_list_p1.clear()
+                detected_gesture_list_p2.clear()
+
                 await ak.sleep(5)
+
                 self.ids.who_won_round.text = ''
 
                 self.p1_choice = constants.LOG_NO_HAND
@@ -379,8 +434,7 @@ class GameWindow(Screen):
 
                 await ak.sleep(3)
 
-                player_1s_turn = True
-                can_show_live_image_p1 = True
+                can_show_live_image_other_player_mode = True
             if p1_score > p2_score:
                 winner = act_settings[constants.USERNAME]
             else:
@@ -431,26 +485,14 @@ class GameWindow(Screen):
             App.get_running_app().root.current = 'scoreboard'
 
     def predicted_photo_p1(self):
-        global detected_gesture
-        if detected_gesture:
-            if detected_gesture in constants.GESTURE_IMAGES.keys():
-                self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture]
+        global detected_gesture_p1
+        if detected_gesture_p1:
+            self.ids.gesture_image_p1.source = constants.GESTURE_IMAGES[detected_gesture_p1]
 
     def predicted_text_p1(self):
-        global detected_gesture
-        if detected_gesture:
-            self.ids.gesture_text_p1.text = detected_gesture
-
-    def predicted_photo_p2(self):
-        global detected_gesture
-        if detected_gesture:
-            if detected_gesture in constants.GESTURE_IMAGES.keys():
-                self.ids.gesture_image_p2.source = constants.GESTURE_IMAGES[detected_gesture]
-
-    def predicted_text_p2(self):
-        global detected_gesture
-        if detected_gesture:
-            self.ids.gesture_text_p2.text = detected_gesture
+        global detected_gesture_p1
+        if detected_gesture_p1:
+            self.ids.gesture_text_p1.text = detected_gesture_p1
 
     def cancel_things(self, instance):
         global should_save_history_file, game_data, game_time_in_secs
@@ -476,9 +518,11 @@ class GameWindow(Screen):
         global p1_score, p2_score, can_show_live_image_p1, winner, game_time_in_secs
         self.cap.release()
         Clock.schedule_once(self.init)
-        global detected_gesture, player_1s_turn, available_gestures, act_settings, settings
-        detected_gesture = None
-        detected_gesture_list.clear()
+        global player_1s_turn, available_gestures, act_settings, settings, detected_gesture_p1, detected_gesture_p2
+        detected_gesture_p1 = None
+        detected_gesture_p2 = None
+        detected_gesture_list_p1.clear()
+        detected_gesture_list_p2.clear()
         p1_score = 0
         p2_score = 0
         game_time_in_secs = 0

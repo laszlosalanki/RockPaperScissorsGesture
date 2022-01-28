@@ -117,6 +117,29 @@ def get_coordinates_by_hand(data, hand_no, img_w, img_h):
     return data
 
 
+def which_players_hand(data, img_w, img_h):
+    player_hands = dict()
+    if len(data) == 1:
+        coords = get_coordinates_by_hand(data, 0, img_w, img_h)
+        if abs(coords[4][1] - img_w) > (img_w / 2):
+            player_hands[constants.PLAYER2] = coords
+        else:
+            player_hands[constants.PLAYER1] = coords
+    else:
+        coords0 = get_coordinates_by_hand(data, 0, img_w, img_h)
+        coords1 = get_coordinates_by_hand(data, 1, img_w, img_h)
+        if abs(coords0[4][1] - img_w) > (img_w / 2):
+            player_hands[constants.PLAYER2] = coords0
+            player_hands[constants.PLAYER1] = coords1
+        elif ((abs(coords0[4][1] - img_w) > (img_w / 2)) and (abs(coords1[4][1] - img_w) > (img_w / 2))) or \
+                ((abs(coords0[4][1] - img_w) < (img_w / 2)) and (abs(coords1[4][1] - img_w) < (img_w / 2))):
+            player_hands = None
+        else:
+            player_hands[constants.PLAYER2] = coords1
+            player_hands[constants.PLAYER1] = coords0
+    return player_hands
+
+
 def recognise_hand_gesture(positions):
     if is_lizard(positions):
         return constants.LIZARD

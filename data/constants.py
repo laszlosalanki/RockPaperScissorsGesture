@@ -16,9 +16,9 @@ LOG_NO_HAND = 'No hand detected'
 
 # Instructions in game
 GET_READY = 'Get ready'
+PREPARE = 'Prepare'
 YOUR_TURN = 'Your turn'
 STAY_STILL = 'Stay still'
-LOOK_AWAY = 'Look away'
 
 P1_WON = '>'
 P2_WON = '<'
@@ -87,6 +87,10 @@ USERNAME_2 = 'USERNAME_2: '
 USERNAME_DEFAULT_VALUE = 'Player 1'
 USERNAME_2_DEFAULT_VALUE = 'Player 2'
 
+# Hand keys
+PLAYER1 = 'Player1'
+PLAYER2 = 'Player2'
+
 # Settings
 SETTINGS_FILE_NAME = 'game.settings'
 SETTINGS_FILE_RELATIVE_PATH = 'data/'
@@ -140,9 +144,6 @@ GESTURE_IMAGES = {
     LOG_CANNOT_RECOGNISE_GESTURE: GESTURE_IMAGES_PATH + 'image-not-found.png',
     LOG_NO_HAND: GESTURE_IMAGES_PATH + 'image-not-found.png'
 }
-
-GESTURE_HIDDEN_IMAGE = GESTURE_IMAGES_PATH + 'top_secret.png'
-GESTURE_HIDDEN_TEXT = 'Gesture hidden temporary'
 
 GESTURE_HAND_IMAGES_PATH = 'images/gestures/'
 GESTURE_HAND_IMAGES = {
