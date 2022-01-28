@@ -156,3 +156,9 @@ GESTURE_HAND_IMAGES = {
     SPIDERMAN: GESTURE_HAND_IMAGES_PATH + 'spiderman.png',
     BATMAN: GESTURE_HAND_IMAGES_PATH + 'batman.png'
 }
+
+# Help window
+HELP_WINDOW_TITLE = 'Properties'
+HELP_WINDOW_WEAKNESSES = 'Weaknesses'
+HELP_WINDOW_STRENGTHS = 'Strengths'
+HELP_WINDOW_CLOSE = 'Close'

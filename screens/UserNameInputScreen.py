@@ -37,8 +37,8 @@ class NextButton(Button):
             username_2 = constants.USERNAME_2_DEFAULT_VALUE
 
         file_name_with_path = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
-        update_settings_file(file_name_with_path, constants.USERNAME, username)
-        update_settings_file(file_name_with_path, constants.USERNAME_2, username_2)
+        update_settings_file(file_name_with_path, constants.USERNAME, username.strip())
+        update_settings_file(file_name_with_path, constants.USERNAME_2, username_2.strip())
 
 
 class UsernameInputScreen(Screen):

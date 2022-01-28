@@ -27,14 +27,14 @@ class HelpWindow(Screen):
         popup = Popup(size=(600, 400), size_hint=(None, None), title=instance.gesture.capitalize())
 
         box_layout_main = BoxLayout(orientation='vertical')
-        box_layout_main.add_widget(Label(text='Properties', font_size=24, size_hint_y=0.2))
+        box_layout_main.add_widget(Label(text=constants.HELP_WINDOW_TITLE, font_size=24, size_hint_y=0.2))
 
         # Container to hold weaknesses and strengths
         box_layout_content = BoxLayout(orientation='horizontal')
 
         # Weaknesses
         box_layout_left = BoxLayout(orientation='vertical', spacing=10, padding=20)
-        box_layout_left.add_widget(Label(text='Weaknesses', font_size=16))
+        box_layout_left.add_widget(Label(text=constants.HELP_WINDOW_WEAKNESSES, font_size=16))
         box_layout_left.add_widget(Label())
         for weakness in constants.WEAKNESSES[instance.gesture]:
             weakness_label = Label(text=weakness, color=(1, 0, 0, 1))
@@ -42,7 +42,7 @@ class HelpWindow(Screen):
 
         # Strengths
         box_layout_right = BoxLayout(orientation='vertical', spacing=10, padding=20)
-        box_layout_right.add_widget(Label(text='Strengths', font_size=16))
+        box_layout_right.add_widget(Label(text=constants.HELP_WINDOW_STRENGTHS, font_size=16))
         box_layout_right.add_widget(Label())
         for strength in constants.STRENGTHS[instance.gesture]:
             strength_label = Label(text=strength, color=(0, 0.5, 0, 1))
@@ -52,7 +52,7 @@ class HelpWindow(Screen):
         box_layout_content.add_widget(box_layout_right)
 
         box_layout_main.add_widget(box_layout_content)
-        close_button = Button(text='Close', size_hint_y=0.2)
+        close_button = Button(text=constants.HELP_WINDOW_CLOSE, size_hint_y=0.2)
         close_button.bind(on_release=popup.dismiss)
         box_layout_main.add_widget(close_button)
 
