@@ -102,3 +102,7 @@ python main.py
 - [OpenCV 2](https://opencv.org)
 - [MediaPipe](https://mediapipe.dev/)
 - [AsyncKivy](https://github.com/gottadiveintopython/asynckivy)
+
+## Image sources:
+- Gestures [Imgur](https://imgur.com/gallery/vKzEw12)
+- Images [KindPNG](https://www.kindpng.com/)

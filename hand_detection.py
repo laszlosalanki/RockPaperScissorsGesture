@@ -145,7 +145,7 @@ def recognise_hand_gesture(positions):
 
 if __name__ == '__main__':
     hd = HandDetection()
-    capture = cv2.VideoCapture(1)
+    capture = cv2.VideoCapture(0)
     while capture.isOpened():
         success, image = capture.read()
         if not success:

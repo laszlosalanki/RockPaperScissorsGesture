@@ -126,7 +126,7 @@ HISTORY_WINNER = 'WINNER'
 HISTORY_TIME = 'TIME'
 
 # Gesture images
-GESTURE_IMAGES_PATH = 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/'
+GESTURE_IMAGES_PATH = 'images/'
 GESTURE_IMAGES = {
     ROCK: GESTURE_IMAGES_PATH + 'rock.png',
     PAPER: GESTURE_IMAGES_PATH + 'paper.png',
@@ -144,7 +144,7 @@ GESTURE_IMAGES = {
 GESTURE_HIDDEN_IMAGE = GESTURE_IMAGES_PATH + 'top_secret.png'
 GESTURE_HIDDEN_TEXT = 'Gesture hidden temporary'
 
-GESTURE_HAND_IMAGES_PATH = 'D:/Downloads/egyetem/hatodik/szakdolgozat/img/gestures/'
+GESTURE_HAND_IMAGES_PATH = 'images/gestures/'
 GESTURE_HAND_IMAGES = {
     ROCK: GESTURE_HAND_IMAGES_PATH + 'rock.png',
     PAPER: GESTURE_HAND_IMAGES_PATH + 'paper.png',
