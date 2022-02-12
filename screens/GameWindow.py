@@ -22,6 +22,7 @@ available_gestures = list()
 can_show_live_image_p1 = True
 
 should_save_history_file = True
+should_draw_handmarks = True
 
 can_show_live_image_other_player_mode = True
 detected_gesture_p1 = None
@@ -87,7 +88,7 @@ class GameWindow(Screen):
         # Run init again (in case of the game was cancelled before)
         Clock.schedule_once(self.init)
         # Read ACT_SETTINGS file
-        global act_settings, settings, game_data, available_gestures
+        global act_settings, settings, game_data, available_gestures, should_draw_handmarks
         act_settings = read_into_dict(act_settings_filename)
         settings = read_into_dict(settings_filename)
         # Set player names according to the selected opponent
@@ -125,12 +126,16 @@ class GameWindow(Screen):
                 max_num_hands=2)
 
         # Schedule camera frame update
+        if settings[constants.SETTINGS_SHOULD_DRAW_HANDMARKS_KEY] == 'True':
+            should_draw_handmarks = True
+        else:
+            should_draw_handmarks = False
         self.update_schedule = Clock.schedule_interval(self.update, 0.03)
 
     def update(self, dt):
         if self.cap.isOpened():
             success, image = self.cap.read()
-            (processed_image, landmarks) = self.hd.find_hand_positions(image)
+            (processed_image, landmarks) = self.hd.find_hand_positions(image, should_draw=should_draw_handmarks)
 
             global detected_gesture_p1, detected_gesture_p2, \
                 detected_gesture_list_p1, detected_gesture_list_p2

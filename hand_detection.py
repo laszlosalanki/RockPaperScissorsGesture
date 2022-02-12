@@ -17,19 +17,13 @@ class HandDetection:
             min_detection_confidence=min_detection_confidence,
             min_tracking_confidence=min_tracking_confidence)
 
-    def find_hand_positions(self, img):
+    def find_hand_positions(self, img, should_draw=True):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         res = self.hands.process(img)
-        if res.multi_hand_landmarks:
-            for lm in res.multi_hand_landmarks:
-                mp_drawing.draw_landmarks(img, lm, mp_hands.HAND_CONNECTIONS)
-        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-        img = cv2.flip(img, 1)
-        return img, res.multi_hand_landmarks
-
-    def find_hand_positions_plain(self, img):
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        res = self.hands.process(img)
+        if should_draw:
+            if res.multi_hand_landmarks:
+                for lm in res.multi_hand_landmarks:
+                    mp_drawing.draw_landmarks(img, lm, mp_hands.HAND_CONNECTIONS)
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         img = cv2.flip(img, 1)
         return img, res.multi_hand_landmarks

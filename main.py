@@ -50,6 +50,10 @@ def create_settings_file_with_default_values():
                          constants.SETTINGS_CAMERA_DEVICE_KEY,
                          constants.SETTINGS_CAMERA_DEVICE_DEFAULT_VALUE,
                          constants.SETTINGS_HEADER)
+    update_settings_file(settings_file,
+                         constants.SETTINGS_SHOULD_DRAW_HANDMARKS_KEY,
+                         constants.SETTINGS_SHOULD_DRAW_HANDMARKS_DEFAULT_VALUE,
+                         constants.SETTINGS_HEADER)
 
 
 def read_settings():

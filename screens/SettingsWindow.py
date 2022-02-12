@@ -93,6 +93,22 @@ class CameraSelectionButton(Button):
         self.popupWindow.open()
 
 
+class DrawLandmarksSwitch(Switch):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        Clock.schedule_once(self.bind_active, 2)
+
+    def bind_active(self, dt):
+        self.bind(active=self.on_active_change)
+
+    def on_active_change(self, instance, value):
+        update_settings_file(filename_with_path,
+                             constants.SETTINGS_SHOULD_DRAW_HANDMARKS_KEY,
+                             value,
+                             constants.SETTINGS_HEADER)
+
+
 class SettingsWindow(Screen):
 
     def __init__(self, **kw):
@@ -128,6 +144,12 @@ class SettingsWindow(Screen):
                 self.ids.min_tra_conf.value = float(value)
             elif key == constants.SETTINGS_CAMERA_DEVICE_KEY:
                 self.keep_up_to_date_schedule = Clock.schedule_interval(self.keep_up_to_date, 2)
+            elif key == constants.SETTINGS_SHOULD_DRAW_HANDMARKS_KEY:
+                if value == 'True':
+                    val = True
+                else:
+                    val = False
+                self.ids.landmarks_switch.active = val
 
     def on_pre_leave(self, *args):
         Clock.unschedule(self.keep_up_to_date_schedule)
