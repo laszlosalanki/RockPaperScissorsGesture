@@ -143,13 +143,16 @@ class SettingsWindow(Screen):
             elif key == constants.SETTINGS_MIN_TRACKING_CONFIDENCE_KEY:
                 self.ids.min_tra_conf.value = float(value)
             elif key == constants.SETTINGS_CAMERA_DEVICE_KEY:
-                self.keep_up_to_date_schedule = Clock.schedule_interval(self.keep_up_to_date, 2)
+                self.keep_up_to_date(None)
             elif key == constants.SETTINGS_SHOULD_DRAW_HANDMARKS_KEY:
                 if value == 'True':
                     val = True
                 else:
                     val = False
                 self.ids.landmarks_switch.active = val
+
+    def on_pre_enter(self, *args):
+        self.keep_up_to_date_schedule = Clock.schedule_interval(self.keep_up_to_date, 2)
 
     def on_pre_leave(self, *args):
         Clock.unschedule(self.keep_up_to_date_schedule)
