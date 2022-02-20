@@ -8,7 +8,6 @@ from cv2 import cv2
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
-from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen
 
 from data import constants
@@ -43,10 +42,6 @@ settings = dict()
 
 act_settings_filename = constants.ACT_GAME_SETTINGS_RELATIVE_PATH + constants.ACT_GAME_SETTINGS_FILE_NAME
 settings_filename = constants.SETTINGS_FILE_RELATIVE_PATH + constants.SETTINGS_FILE_NAME
-
-
-class CameraFrame(Image):
-    pass
 
 
 def incr_game_time(dt):
