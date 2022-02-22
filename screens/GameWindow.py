@@ -130,7 +130,7 @@ class GameWindow(Screen):
     def update(self, dt):
         if self.cap.isOpened():
             success, image = self.cap.read()
-            (processed_image, landmarks) = self.hd.find_hand_positions(image, should_draw=should_draw_handmarks)
+            processed_image, landmarks = self.hd.find_hand_positions(image, should_draw=should_draw_handmarks)
 
             global detected_gesture_p1, detected_gesture_p2, \
                 detected_gesture_list_p1, detected_gesture_list_p2
