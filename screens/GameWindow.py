@@ -8,6 +8,7 @@ from cv2 import cv2
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 
 from data import constants
@@ -233,6 +234,12 @@ class GameWindow(Screen):
             texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
             self.ids.camera_frame.texture = texture
+        else:
+            error = Popup(title='Error', text='Could not open camera feed')
+            error.open()
+            await ak.sleep(5)
+            error.dismiss()
+            App.get_running_app().root.current = 'main'
 
     async def computer_game(self):
         global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image_p1, \
