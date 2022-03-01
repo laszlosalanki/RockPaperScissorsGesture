@@ -50,6 +50,14 @@ def incr_game_time(dt):
     game_time_in_secs += 1
 
 
+async def handle_error():
+    error = Popup(title='Error', text='Could not open camera feed')
+    error.open()
+    await ak.sleep(5)
+    error.dismiss()
+    App.get_running_app().root.current = 'main'
+
+
 class GameWindow(Screen):
 
     def __init__(self, **kw):
@@ -235,11 +243,7 @@ class GameWindow(Screen):
 
             self.ids.camera_frame.texture = texture
         else:
-            error = Popup(title='Error', text='Could not open camera feed')
-            error.open()
-            await ak.sleep(5)
-            error.dismiss()
-            App.get_running_app().root.current = 'main'
+            ak.start(handle_error())
 
     async def computer_game(self):
         global player_1s_turn, p1_score, p2_score, available_gestures, can_show_live_image_p1, \
